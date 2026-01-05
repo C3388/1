@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中原女工钩编</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义配色 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {            
+            primary: '#8B5A2B',
+            secondary: '#F5F5DC',
+            accent: '#4F7942',
+            dark: '#3E2723',
+            light: '#FFF8E7'
+          },
+          fontFamily: {
+            sans: ['Noto Sans SC', 'sans-serif'],
+            serif: ['Noto Serif SC', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .card-radius {
+        border-radius: 8px;
+      }
+      .icon-bg {
+        background-color: #F0E8DD;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .card-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(159, 126, 105, 0.1);
+      }
+      .text-shadow {
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .search-result-item {
+        @apply py-2 px-3 hover:bg-secondary/30 rounded transition-colors cursor-pointer;
+      }
+      .search-result-title {
+        @apply font-medium text-dark;
+      }
+      .search-result-type {
+        @apply text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded-full mt-1 inline-block;
+      }
+      .search-empty {
+        @apply py-4 text-center text-gray-500 text-sm;
+      }
+      .nav-hover {
+        @apply relative overflow-hidden transition-all duration-300 hover:text-primary;
+      }
+      .nav-hover::after {
+        @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 content-[''];
+      }
+      .nav-hover:hover::after {
+        @apply w-full;
+      }
+    }
+  </style>
+  
+  <!-- 全局样式 -->
+  <style>
+    /* 导入中文字体 */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+    
+    body {
+      background-color: #FFF8E7;
+      scroll-behavior: smooth;
+      font-family: "Noto Sans SC", sans-serif;
+      color: #3E2723;
+    }
+    
+    /* 钩编纹理背景效果 */
+    .crochet-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5A2B' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F5DC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8B5A2B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6d4421;
+    }
+    
+    /* 淡入动画 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 导航栏滚动效果 */
+    #navbar {
+      transition: all 0.3s ease;
+    }
+    .navbar-scrolled {
+      background-color: rgba(255, 248, 231, 0.95);
+      box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
+    }
+  </style>
+</head>
+<body class="font-sans text-dark crochet-bg">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full bg-light/95 shadow-md z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 md:py-4">
+      <div class="flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <i class="fa fa-scissors text-white text-xl"></i>
+          </div>
+          <span class="text-xl font-serif font-bold">中原女工钩编</span>
+        </a>
+        
+        <!-- 桌面导航 -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="nav-hover">首页</a>
+          <a href="#skills" class="nav-hover">其他</a>
+        </nav>
+        
+        <!-- 右侧工具区（搜索+分享+日期） -->
+        <div class="flex items-center">
+          <!-- 搜索框 -->
+          <div class="search-trigger relative mr-4">
+            <div class="search-box flex items-center bg-light rounded-lg px-3 py-1.5 border border-gray-200">
+              <i class="fa fa-search text-gray-400 mr-2"></i>
+              <input placeholder="搜索作品、艺人或故事..." class="kkword kf_search bg-transparent border-none outline-none w-48 md:w-64 placeholder-gray-400 text-sm" type="text">
+              <button class="search-btn submit_base ml-2 text-primary hover:text-primary/80 transition-colors">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <!-- 搜索结果下拉框 -->
+            <div id="search-result-dropdown" class="absolute top-full right-0 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 hidden">
+              <div id="search-result-content" class="p-3 max-h-60 overflow-y-auto">
+                <!-- 搜索结果将在这里动态渲染 -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- 实时日期显示 -->
+          <div class="calendar-box hidden md:block" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+            <span id="current-date"></span>&nbsp;&nbsp;
+            <span id="current-week"></span>&nbsp;&nbsp;
+          </div>
+
+          <!-- 移动端菜单按钮 -->
+          <button id="menu-toggle" class="md:hidden text-dark text-2xl">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <!-- 移动端日期显示 -->
+        <div class="calendar-box py-2 border-b border-gray-100" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+          <span id="current-date-mobile"></span>&nbsp;&nbsp;
+          <span id="current-week-mobile"></span>&nbsp;&nbsp;
+        </div>
+        <a href="#home" class="nav-hover block py-2">首页</a>
+        <a href="#skills" class="nav-hover block py-2">其他</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-24">
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-16 pb-24">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-10 md:gap-20 relative">
+          <!-- 左侧主图 - 可替换为代表性钩编作品图片 -->
+          <div class="md:w-1/2 fade-in">
+            <div class="rounded-lg overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500">
+              <img src="/yolov11/goubian/images/图片105.png" alt="精美的中原钩编作品展示" class="w-full h-auto">
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary rounded-full -z-10 hidden md:block"></div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 border-4 border-primary/30 rounded-full -z-10 hidden md:block"></div>
+          </div>
+          <!-- 右侧文本 -->
+          <div class="md:w-1/2 relative fade-in">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-serif font-bold leading-tight mb-6">
+              布艺女工<br><span class="text-primary">香包</span>
+            </h1>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              香包是一个很民俗的手工技艺，分布较为分散，并且一般都是以艺人个体为单位，在郑州地区，掌握香包技艺的民间艺人很稀少，经过普查，香包技艺在郑州有比较久的流传历史。
+            </p>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              香包，古称香囊，亦称佩帏、容臭。
+            </p>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              其制作和佩戴史至少可以上溯到战国时期，屈原《离骚》中有“扈江篱与辟芷兮，纫秋兰以为佩”。
+            </p>   
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              纫，乃连缀之意。佩即佩帏，在这里既指香包，也含佩带之意。
+            </p>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              全句的意思是把装满香草的佩帏带在身上。这说明香包早在屈子所处的战国时代已是一种饰物了。
+            </p>                             
+            <div class="flex gap-4">
+              <a href="#skills" class="px-6 py-3 bg-primary text-light rounded-lg hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg">
+                了解更多
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于女红区域 - 对应 #about 锚点（自适应网页大小） -->
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            历史渊源
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">历史渊源</span>
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            汉代《礼记》有云：“男女未冠笄者……衿缨皆陪容臭”。容臭即香包，说明汉代未成年的男女都是佩戴香包的。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            到了唐宋时期，香囊逐渐成为仕女、美人的专用品。而男官吏们则开始佩戴荷包了。有的官吏上朝时干脆把荷包缀于朝服之上。当然，那时的荷包与香包不完全一样，香包里主要装的是香草，而荷包主要是“盛手巾细物”的。这与前不久华池县双塔寺出土的手包型“千岁香包”比较吻合。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            至清代，香囊已成为爱情的信物了。《红楼梦》第十七回宝玉与黛玉之间的一次“闹别扭”便是由送荷包引发的。而历史演化到近代，香包则多半用于民间端午节的赠品，主要功能是求吉祈福，驱恶避邪的。
+          </p>         
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            香包，古人叫香缨、香囊、佩帏、容臭，今人称荷包、耍货子、绌绌。它是古代劳动妇女创造的一类民间刺绣工艺品。是以男耕女织为标志的古代农耕文化的产物，是越千年而余绪未泯的中华传统文化的遗存和再生。香包从狭义讲，是指里面填充丁香、雄黄、艾叶末、冰片、霍香、苍术等具有芳香除湿功效的中药材粉末，外表绣以各种图案的实体造型工艺品。它形状象包，填充物又有香味，故称香包。香包从广义讲，既包括实体型香包，又包括没有填装料的各类刺绣工艺品，如刺绣鞋垫、肚兜、帽子、披肩、枕套、台布、门帘、烟包等。香包范围的扩大，既反映了历史的演进，也反映了劳动妇女与时俱进的创新智慧。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            香包的起源有几种说法，其一是以前人们在野外住宿，为防止毒蛇叮咬，把中草药用树叶包起来放在身旁，起驱虫的作用。后来改用布和丝绸，慢慢成为一种装饰物、吉祥物。其二是：香包作为行军打仗时传递军事机密和书信的工具，史称“锦囊”，三国时诸葛亮给赵云的“锦囊妙计”的装信之物就是香包。其三是：有未嫁女儿的人家要临街修阁楼，四面开窗，选婿时女子上阁楼，抛香包给相中之人以作定情之物。香包中配以香草，香草以细辛、白芷、丁香、甘松、苍术等中草药研细配制而成，有香味，直到了除秽避邪之功。
+          </p>   
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            从我国民间现存清代以来的香包看，大多数以花卉和动物为主图，以隐喻象征等手法表达各种情感寄托和美好向往。比方，用莲花、荷花、牡丹、梅花等喻意女性;用登梅的喜鹊、采花的蜜蜂隐喻男性;松鹤象征长寿、石榴象征多子;而利用汉字的谐音做比喻者更是随处可见：送给新婚夫妇的“早生贵子”(枣儿、花生、桂圆、莲子组合图案);送给长寿老人的“耄耋童趣”(以猫和蝴蝶戏牡丹组合图案，喻意老年生活非常有情趣);送给小孩的“福寿娃娃”(以憨态十足的娃娃为主体，周围环绕蝙蝠、桃子组图，寓意此子今生多福多寿)
+          </p>                 
+        </div>      
+      </div>
+    </section>
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            制作工具
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">制作香包的工具有：</span>
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (1)针：针需准备绣花针和缝衣针两种。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (2)剪刀：以尖口的剪刀较佳，因尖口剪刀较能剪出细小转折的部分。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (3)白胶、糨糊：白胶和糨糊为接着剂，视实际需要而决定用白胶或糨糊。
+          </p>         
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (4)竹棒：塞棉花时以竹棒推动棉花，较能使其扎实。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (5)复写纸：布料较细较薄制作实物形体香包，需在白纸上画出香包的形状，再以复写纸描印布上。
+          </p>                    
+        </div>             
+      </div>
+    </section>
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            制作材料
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">制作香包的材料有：</span>
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            香包的材料种类繁多，各种可应用的都可利用，从前农业社会制作香包，它的材料大都以做衣服、鞋于等所剩的零星碎布做为香包的材料，棉布、麻布、绸缎等布料皆可应用，大都是家中有什么样的布，再依材料设计香包的式样及做法，将较常见的材料介绍于下:
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (1)织锦缎:可利用布料本身的花样设计制作。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (2)素面缎:展现精巧的绣工。
+          </p>         
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (3)棉布、麻布:可依需要而设计、应用。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (4)毛呢、绒布、不织布:这几种布料，不需摺边与裡衬，对于初学者或针线功夫不太好的人较为适合。
+          </p>      
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (5)线、有缝线、绣线、装饰线的分别:
+          </p>           
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            1.绣线、缝衣线：线为缝制香包必须的材料，一般缝制外缘是以缝衣线或绣线缝制，若需刺绣则以绣线来缝绣以增加美观。
+          </p>           
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            2.挂线：过去都以红色丝线或棉线做为挂线，如今大都以利利安线为挂线，利利安线有人造丝及尼龙丝两种，人造丝质地较柔软，尼龙丝制造的利利安线质地较粗硬。
+          </p>           
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (6)穗子：穗子可增加香包的美观，过去大都以丝线或棉线为材料，近年来大都以利利安线为材料，频色大都与挂线相同，上下频色相同成为一组。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (7)金葱线：为了增加香包所用的美感和豪华感，在香包的周围常以金葱线来装饰。
+          </p>  
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (8)棉花：制作香包所用的棉花，以木棉为佳，因木棉塞入香包之后质感和弹性较佳。
+          </p>  
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (9)香末：以檀香、白芷、桂心等和各种孳材香料溷合的香末为上品，檀香根据研究可以使人注意力集人，心神宁静、提神醒脑，所以古人让儿迈佩带香包自有他的用意，而其他的香料或孳材也有去蚊蚋的功效，蚊虫不侵就不易得传染病，能平安顺利长成，而注意力集中，学业、事业较能成功。
+          </p>  
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (10)亮片：香包的装饰除以贴布、剌绣装饰外，黏钉亮片是能使香包更表现豪华感的装饰，亮片种类和形状很多，有圆形、六角形、锯齿形、花瓣形、叶片形、柱形等，色彩也非常多，金、银、红、粉红、深蓝、浅蓝、深绿、浅绿、深紫等应有尽，有随自己的喜好和需要而自由选择。
+          </p>  
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (11)珠子：珠子依材料分有玻璃珠子、假珠珠、陶珠、木珠、铜珠等，大小、形状、色彩等种类繁多，依个人需要而选择。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (12)铁丝：20号、22号、28号各种粗细不同的铁丝，可应用于各种不同的场合，例如造形、站立或小昆虫的脚等。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (13)卡纸或厚纸板：卡纸或厚纸皮是画纸型或做缠绕香包所需材料。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (14)纸衬：是使布定型、绸缎或较薄布料裡面需烫纸衬，加上纸之后形状较固定硬挺，也较不易起毛边。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (15)线：毛线、手钓纱，以钩针钩成。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (16)蒲草或杆：以切割黏贴方式形成香包。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (17)竹片、丝带：以编统方式做成香包。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (18)罗楠香：罗楠香也是香末的一种，有黏性，和水之后如麵糟有韧性，但因塑造不易，大都以模型压印较快。
+          </p> 
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            (19)羽毛：装饰用材料。
+          </p> 
+        </div>        
+      </div>
+    </section>
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            特征及价值
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">基本特征：</span>
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            香包技艺的基本特征主要表现在香包的内容上，香包作品种类繁多，有花、动物、人物以及故事等，寓意都非常美好，主题非常多，主辅相衬十分得当。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            香包刺绣手法多变，不讲透视，不求比例;不讲形象，只求神似;夸张变形，突出头身。各种动物香包，或大头小身、有头无尾，或有头无足、有头有身无腿，或身长蹄短，以爪代腿等。如肩头狮虎，一般头比身大，有爪无腿，既不是真实形象，又不合形体比例，完全由刺绣艺人随艺术思考刺就，在针线中表现了很高超的民俗技艺。
+          </p>
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">主要价值：</span>
+          </p>          
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            1、文化价值
+          </p>         
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            香包技艺的传统色彩浓重，工艺精湛，立体感强，动静互补，民俗意识深厚，均有其美好的象征性，是民间艺术瑰宝。作为端午节的民间传统饰物，香包寄托着人们心灵深处的美好诉求，渗透着"祈福避邪"的象征意义，件件都被赋予展现生命、活力，表达思想、信仰，揭示人性、欲望的民俗文化内涵，充分反映了劳动人民纯朴、健康、向上的精神风貌，蕴含着华夏古老文明博大、雄奇、阳刚的民族魂魄。
+          </p>
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            2、工艺价值
+          </p>     
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            在中国香包悠久的历史传承中，香包技艺随着社会的进步，与我国其他文化艺术相融合，在针线艺术中表现了高超的民俗风采，通过一针一线一把剪刀，活灵活现的高超的民俗风采，通过一针一线一把剪刀，活灵活现的龙、凤、金鱼、胖娃娃、小老虎、狮子、老鼠、蛇、青蛙、螃蟹等常见的图案，就飘摇在我们无比温馨的世界里。
+          </p>            
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            3、养生价值
+          </p>            
+          <p class="text-gray-700 mb-8 leading-relaxed">
+            古代香包技艺制作过程中里面填充丁香、雄黄、艾叶末、冰片、霍香、苍术等具有芳香除湿功效的中药材粉末，现代香包里可以填充各种天然的香花香草，如薰衣草、玫瑰、茉莉、薄荷等等，既散发出怡人的香味，又利于身心健康。
+          </p>             
+        </div>             
+      </div>
+    </section>    
+  </main>
+
+  <footer class="bg-dark text-light py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
+      <div class="text-center">
+        <p class="mb-3">© 2025 中原女工钩编 版权所有</p>
+        <p class="text-gray-400 text-sm">传承传统技艺 · 弘扬中华文化</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 滚动动画效果
+    document.addEventListener('DOMContentLoaded', function() {
+      // ========== 日期显示功能 ==========
+      function formatDate() {
+        const now = new Date();
+        // 定义星期数组
+        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        
+        // 获取年月日
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        // 获取星期
+        const week = weekDays[now.getDay()];
+        
+        // 格式化日期字符串
+        const dateStr = `${year}年${month}月${day}日`;
+        
+        // 填充到页面元素
+        const dateElement = document.getElementById('current-date');
+        const weekElement = document.getElementById('current-week');
+        const dateMobileElement = document.getElementById('current-date-mobile');
+        const weekMobileElement = document.getElementById('current-week-mobile');
+        
+        if (dateElement) dateElement.textContent = dateStr;
+        if (weekElement) weekElement.textContent = week;
+        if (dateMobileElement) dateMobileElement.textContent = dateStr;
+        if (weekMobileElement) weekMobileElement.textContent = week;
+      }
+      
+      // 初始化日期显示
+      formatDate();
+      // 每分钟更新一次（可选）
+      setInterval(formatDate, 60000);
+
+      // ========== 淡入动画 ==========
+      const fadeElements = document.querySelectorAll('.fade-in');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        observer.observe(element);
+      });
+
+      // ========== 导航栏滚动效果 ==========
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('navbar-scrolled');
+        } else {
+          navbar.classList.remove('navbar-scrolled');
+        }
+      });
+
+      // ========== 移动端菜单切换 ==========
+      const mobileMenuBtn = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        // 切换图标
+        const icon = mobileMenuBtn.querySelector('i');
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        } else {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        }
+      });
+
+      // ========== 平滑滚动 ==========
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // 关闭移动端菜单
+            mobileMenu.classList.add('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+            
+            // 平滑滚动
+            window.scrollTo({
+              top: targetElement.offsetTop - 100,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

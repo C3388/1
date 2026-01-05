@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五大传统女红技艺</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义配色 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {            
+            primary: '#8B5A2B',
+            secondary: '#F5F5DC',
+            accent: '#4F7942',
+            dark: '#3E2723',
+            light: '#FFF8E7'
+          },
+          fontFamily: {
+            sans: ['Noto Sans SC', 'sans-serif'],
+            serif: ['Noto Serif SC', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .card-radius {
+        border-radius: 8px;
+      }
+      .icon-bg {
+        background-color: #F0E8DD;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .card-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(159, 126, 105, 0.1);
+      }
+      .text-shadow {
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .search-result-item {
+        @apply py-2 px-3 hover:bg-secondary/30 rounded transition-colors cursor-pointer;
+      }
+      .search-result-title {
+        @apply font-medium text-dark;
+      }
+      .search-result-type {
+        @apply text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded-full mt-1 inline-block;
+      }
+      .search-empty {
+        @apply py-4 text-center text-gray-500 text-sm;
+      }
+    }
+  </style>
+  
+  <!-- 全局样式 -->
+  <style>
+    /* 导入中文字体 */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+    
+    body {
+      background-color: #FFF8E7;
+      scroll-behavior: smooth;
+      font-family: "Noto Sans SC", sans-serif;
+      color: #3E2723;
+    }
+    
+    /* 钩编纹理背景效果 */
+    .crochet-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5A2B' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F5DC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8B5A2B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6d4421;
+    }
+    
+    /* 搜索框样式优化 */
+    .search-trigger .search-box {
+      transition: all 0.3s ease;
+    }
+    .search-trigger .search-box:focus-within {
+      box-shadow: 0 2px 8px rgba(139, 90, 43, 0.1);
+    }
+    #search-result-dropdown::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    /* 导航链接激活状态 */
+    .nav-link.active {
+      color: #8B5A2B;
+      font-weight: 500;
+    }
+  </style>
+</head>
+<body class="font-sans text-dark crochet-bg">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full bg-light/95 shadow-md z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 md:py-4">
+      <div class="flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <i class="fa fa-scissors text-white text-xl"></i>
+          </div>
+          <span class="text-xl font-serif font-bold">中原女工钩编</span>
+        </a>
+        
+        <!-- 桌面导航 -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="nav-link hover:text-primary transition-colors">首页</a>
+          <a href="#skills" class="nav-link hover:text-primary transition-colors">技艺展示</a>
+          <a href="#about" class="nav-link hover:text-primary transition-colors">关于女红</a>
+          <a href="#other" class="nav-link hover:text-primary transition-colors">其他技艺</a>
+        </nav>
+        
+        <!-- 右侧工具区（搜索+分享+日期） -->
+        <div class="flex items-center">
+          <!-- 搜索框 -->
+          <div class="search-trigger relative mr-4">
+            <div class="search-box flex items-center bg-light rounded-lg px-3 py-1.5 border border-gray-200">
+              <i class="fa fa-search text-gray-400 mr-2"></i>
+              <input placeholder="搜索作品、艺人或故事..." class="kkword kf_search bg-transparent border-none outline-none w-48 md:w-64 placeholder-gray-400 text-sm" type="text">
+              <button class="search-btn submit_base ml-2 text-primary hover:text-primary/80 transition-colors">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <!-- 搜索结果下拉框 -->
+            <div id="search-result-dropdown" class="absolute top-full right-0 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 hidden">
+              <div id="search-result-content" class="p-3 max-h-60 overflow-y-auto">
+                <!-- 搜索结果将在这里动态渲染 -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- 社交分享 -->
+          <div class="share-box social-share mr-4" data-initialized="true">
+            <a href="#" class="social-share-icon share-item icon-wchat icon-weixin text-xl"></a>
+            <a href="#" class="social-share-icon share-item icon-sinawb icon-weibo text-xl"></a>
+          </div>
+          
+          <!-- 实时日期显示 -->
+          <div class="calendar-box hidden md:block" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+            <span id="current-date"></span>&nbsp;&nbsp;
+            <span id="current-week"></span>&nbsp;&nbsp;
+          </div>
+
+          <!-- 移动端菜单按钮 -->
+          <button id="menu-toggle" class="md:hidden text-dark text-2xl">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <!-- 移动端日期显示 -->
+        <div class="calendar-box py-2 border-b border-gray-100" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+          <span id="current-date-mobile"></span>&nbsp;&nbsp;
+          <span id="current-week-mobile"></span>&nbsp;&nbsp;
+        </div>
+        <a href="#home" class="nav-link block py-2 hover:text-primary transition-colors">首页</a>
+        <a href="#skills" class="nav-link hover:text-primary transition-colors">技艺展示</a>
+        <a href="#about" class="nav-link hover:text-primary transition-colors">关于女红</a>
+        <a href="#other" class="nav-link hover:text-primary transition-colors">其他技艺</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-24">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-10">
+          <!-- 左侧文本 -->
+          <div class="md:w-1/2 fade-in">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-serif font-bold leading-tight mb-6">
+              五大传统<br><span class="text-primary">女红技艺</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-lg">
+              中原女工以巧手传匠心，将生活美学融入一针一线，铸就千年女红文化瑰宝。
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#skills" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+                技艺展示
+              </a>
+              <a href="#about" class="border-2 border-primary text-primary hover:bg-primary/5 px-6 py-3 rounded-lg transition-all">
+                关于女红
+              </a>
+            </div>
+          </div>
+          
+          <!-- 右侧主图 - 可替换为代表性钩编作品图片 -->
+          <div class="md:w-1/2 relative fade-in">
+            <div class="rounded-lg overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500">
+              <img src="https://picsum.photos/800/600?random=10" alt="精美的中原钩编作品展示" class="w-full h-auto">
+              <!-- 图片可替换为：高质量的钩编作品照片，如桌布、披肩或装饰品 -->
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary rounded-full -z-10"></div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 border-4 border-primary/30 rounded-full -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  <!-- <main class="pt-24"> -->
+    <!-- 首页区域 - 对应 #home 锚点 -->
+    <!-- <section id="home" class="min-h-[calc(100vh-15rem)] flex items-center">
+        <div class="container mx-auto px-4">             
+           <div class="max-w-7xl mx-auto px-4 md:px-8 py-6"> -->
+        <!-- 标题区域 -->
+        <!-- <div class="text-center mb-2 fade-in">
+          <h1 class="text-[clamp(1.8rem,4vw,3.5rem)] font-serif font-bold text-dark mb-4">
+            五大传统女红技艺
+          </h1>
+          <div class="w-20 h-1 bg-primary mx-auto mb-2"></div>
+          <p class="text-gray-600 max-w-3xl mx-auto text-lg">
+            中原女工以巧手传匠心，将生活美学融入一针一线，铸就千年女红文化瑰宝
+          </p>
+        </div>
+      </div>
+    </section>  -->
+
+    <!-- 技艺展示区域 - 对应 #skills 锚点 -->
+    <section id="skills" class="pt-24">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-4xl font-serif font-bold text-dark mb-3">
+            五大传统技艺
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+          <p class="text-gray-600 max-w-3xl mx-auto text-sm md:text-base">
+            五大女红技艺，各具特色，承载着中华民族的审美情趣和生活智慧
+          </p>
+        </div>
+
+        <!-- 卡片区域 - 放大卡片，减小间距 -->
+         <div class="grid sm:grid-cols-2 lg:grid-cols-5 gap-8">
+        <!-- <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-3 md:gap-4"> -->
+          <!-- 刺绣女红 -->
+          <a href="cx13.html" class="block">
+            <div class="bg-light card-radius p-6 md:p-8 shadow-sm card-hover h-full flex flex-col">
+              <div class="w-16 h-16 rounded-full icon-bg flex items-center justify-center mb-5">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 8V16M8 12H16M4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12Z" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl md:text-3xl font-serif font-bold text-dark mb-3">刺绣女红</h3>
+              <p class="text-gray-700 text-2xl md:text-base flex-grow">
+                以针代笔，以线为墨，苏绣、蜀绣技法融合中原特色，花鸟鱼虫跃然布上
+              </p>
+            </div>
+          </a>
+
+          <!-- 布艺女红 -->
+          <a href="by13.html" class="block">
+            <div class="bg-light card-radius p-6 md:p-8 shadow-sm card-hover h-full flex flex-col">
+              <div class="w-16 h-16 rounded-full icon-bg flex items-center justify-center mb-5">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M14.121 10.4859L7.05025 3.41515L5.63599 4.82941L12.7067 11.8992" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M16.9993 7.59961L19.8277 4.77122L21.242 6.18548L18.4136 9.01387" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6.40039 17.5996L17.4004 6.59961" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl md:text-3xl font-serif font-bold text-dark mb-3">布艺女红</h3>
+              <p class="text-gray-700 text-2xl md:text-base flex-grow">
+                剪裁拼贴间尽显巧思，香囊、荷包、布偶等物件，承载民俗与祝福
+              </p>
+            </div>
+          </a>
+
+          <!-- 纺织女红 -->
+          <a href="fz13.html" class="block">
+            <div class="bg-light card-radius p-6 md:p-8 shadow-sm card-hover h-full flex flex-col">
+              <div class="w-16 h-16 rounded-full icon-bg flex items-center justify-center mb-5">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M3 12L6 8L9 12L12 8L15 12L18 8L21 12" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 16L6 12L9 16L12 12L15 16L18 12L21 16" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M3 8L6 12L9 8L12 12L15 8L18 12L21 8" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl md:text-3xl font-serif font-bold text-dark mb-3">纺织女红</h3>
+              <p class="text-gray-700 text-2xl md:text-base flex-grow">
+                采棉纺纱，织布成衣，传统织机编织出天然肌理，尽显质朴之美
+              </p>
+            </div>
+          </a>
+
+          <!-- 印染女红 -->
+          <a href="yr13.html" class="block">
+            <div class="bg-light card-radius p-6 md:p-8 shadow-sm card-hover h-full flex flex-col">
+              <div class="w-16 h-16 rounded-full icon-bg flex items-center justify-center mb-5">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 22C17.5228 22 22 17.5228 22 12C22 6.47715 17.5228 2 12 2C6.47715 2 2 6.47715 2 12C2 17.5228 6.47715 22 12 22Z" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M12 15V8" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 11H16" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl md:text-3xl font-serif font-bold text-dark mb-3">印染女红</h3>
+              <p class="text-gray-700 text-2xl md:text-base flex-grow">
+                扎染、蜡染工艺传承至今，蓝白之间晕染出自然肌理，独具韵味
+              </p>
+            </div>
+          </a>
+
+          <!-- 编结女红 -->
+          <a href="bj13.html" class="block">
+            <div class="bg-light card-radius p-6 md:p-8 shadow-sm card-hover h-full flex flex-col">
+              <div class="w-16 h-16 rounded-full icon-bg flex items-center justify-center mb-5">
+                <svg width="28" height="28" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M8 20V12C8 10.8954 8.89543 10 10 10H14C15.1046 10 16 10.8954 16 12V20" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M8 16H16" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M10 6C10 4.89543 10.8954 4 12 4C13.1046 4 14 4.89543 14 6C14 7.10457 13.1046 8 12 8C10.8954 8 10 7.10457 10 6Z" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                  <path d="M6 20H18" stroke="#8B5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <h3 class="text-3xl md:text-3xl font-serif font-bold text-dark mb-3">编结女红</h3>
+              <p class="text-gray-700 text-2xl md:text-base flex-grow">
+                钩针、棒针编织，围巾、披肩、摆件等作品，温暖实用且富有艺术感
+              </p>
+            </div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- 关于女红区域 - 对应 #about 锚点（自适应网页大小） -->
+    <section id="about" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            关于传统女红
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full">
+          <p class="text-gray-700 text-2xl mb-8 leading-relaxed">
+            女红，亦作"女工"、"女功"，指女子所做的针线、纺织、刺绣、缝纫等工作和这些工作的成品。它是中国传统文化的重要组成部分，承载着中华民族的审美情趣、生活智慧和民俗风情。
+          </p>
+          <p class="text-gray-700 text-2xl mb-8 leading-relaxed">
+            传统女红技艺历史悠久，最早可追溯到新石器时代。经过数千年的发展，形成了刺绣、布艺、纺织、印染、编结等众多门类，每种技艺都有其独特的工艺流程和艺术风格。
+          </p>
+          <p class="text-gray-700 text-2xl mb-8 leading-relaxed">
+            中原地区作为中华文明的发源地之一，其女红技艺融合了南北特色，既有精致细腻的苏绣风格，又有质朴大气的北方韵味。这些技艺不仅是实用的生活技能，更是女子表达情感、传承文化的重要方式。
+          </p>
+          <p class="text-gray-700 text-2xl leading-relaxed">
+            如今，传统女红技艺在新时代焕发出新的生机。年轻一代的手工艺人在继承传统的基础上不断创新，将现代设计理念与传统技艺相结合，让这一古老的文化遗产得以传承和发展。
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <section id="other" class="pt-16 pb-24">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-10 md:gap-20 relative">
+          <!-- 左侧主图 - 可替换为代表性钩编作品图片 -->
+          <div class="md:w-1/2 fade-in">
+            <div class="rounded-lg overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500">
+              <img src="/yolov11/goubian/images/图片24.png" alt="精美的中原钩编作品展示" class="w-full h-auto">
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary rounded-full -z-10 hidden md:block"></div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 border-4 border-primary/30 rounded-full -z-10 hidden md:block"></div>
+          </div>
+          <!-- 右侧文本 -->
+          <div class="md:w-1/2 relative fade-in">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-serif font-bold leading-tight mb-6">
+              获嘉小杨庄<br><span class="text-primary">木版年画</span>
+            </h1>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              虽归为绘画类非遗，但后期上色等工序多由女性传承人主导，属于女红相关的民俗手工技艺，且为省级非遗项目。
+            </p>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              其起源于明末，距今有四百多年历史，作品以先贤、神话等吉祥题材为主，色彩浑厚鲜艳、构图饱满。
+            </p>              
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              传承人郭彩霞作为核心传承力量，组织农村妇女开展制作培训，既传授上色、印制等技巧，还创新出《中国梦》等贴合时代的作品，让这门技艺成为带动女性增收、传承民俗的重要载体。   
+            </p>                        
+            <div class="flex gap-4">
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>   
+  </main>
+
+  <footer class="bg-dark text-light py-6">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
+      <div class="text-center">
+        <p class="mb-3">© 2025 中原女工钩编 版权所有</p>
+        <p class="text-gray-400 text-sm">传承传统技艺 · 弘扬中华文化</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 移动端菜单切换
+    document.getElementById('menu-toggle').addEventListener('click', function() {
+      const mobileMenu = document.getElementById('mobile-menu');
+      mobileMenu.classList.toggle('hidden');
+    });
+    
+    // 滚动动画效果
+    document.addEventListener('DOMContentLoaded', function() {
+      const fadeElements = document.querySelectorAll('.fade-in');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        observer.observe(element);
+      });
+      
+      // 日期显示功能
+      function updateDate() {
+        const now = new Date();
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        
+        const dateStr = now.toLocaleDateString('zh-CN', options);
+        const weekStr = weekDays[now.getDay()];
+        
+        document.getElementById('current-date').textContent = dateStr;
+        document.getElementById('current-week').textContent = weekStr;
+        document.getElementById('current-date-mobile').textContent = dateStr;
+        document.getElementById('current-week-mobile').textContent = weekStr;
+      }
+      
+      updateDate();
+      
+      // 平滑滚动功能
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          
+          // 获取目标ID
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // 计算滚动位置（减去导航栏高度，避免被导航栏遮挡）
+            const navbarHeight = document.getElementById('navbar').offsetHeight;
+            const targetPosition = targetElement.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+            
+            // 平滑滚动
+            window.scrollTo({
+              top: targetPosition,
+              behavior: 'smooth'
+            });
+            
+            // 关闭移动端菜单（如果打开）
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (!mobileMenu.classList.contains('hidden')) {
+              mobileMenu.classList.add('hidden');
+            }
+          }
+        });
+      });
+      
+      // 导航栏滚动效果
+      window.addEventListener('scroll', function() {
+        const navbar = document.getElementById('navbar');
+        const scrollPosition = window.scrollY;
+        
+        // 滚动时改变导航栏样式
+        if (scrollPosition > 50) {
+          navbar.classList.add('py-2', 'shadow-lg');
+          navbar.classList.remove('py-3', 'md:py-4');
+        } else {
+          navbar.classList.add('py-3', 'md:py-4');
+          navbar.classList.remove('py-2', 'shadow-lg');
+        }
+        
+        // 更新导航链接激活状态
+        updateActiveNavLink();
+      });
+      
+      // 更新当前激活的导航链接
+      function updateActiveNavLink() {
+        const sections = document.querySelectorAll('section[id]');
+        const navLinks = document.querySelectorAll('.nav-link');
+        
+        let currentSection = '';
+        
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop - 100;
+          const sectionHeight = section.offsetHeight;
+          
+          if (window.scrollY >= sectionTop && window.scrollY < sectionTop + sectionHeight) {
+            currentSection = section.getAttribute('id');
+          }
+        });
+        
+        navLinks.forEach(link => {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === `#${currentSection}`) {
+            link.classList.add('active');
+          }
+        });
+      }
+      
+      // 初始加载时更新一次激活状态
+      updateActiveNavLink();
+    });
+  </script>
+</body>
+</html>

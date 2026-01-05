@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中原女工钩编</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- 配置Tailwind自定义配色 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {            
+            primary: '#8B5A2B',
+            secondary: '#F5F5DC',
+            accent: '#4F7942',
+            dark: '#3E2723',
+            light: '#FFF8E7'
+          },
+          fontFamily: {
+            sans: ['Noto Sans SC', 'sans-serif'],
+            serif: ['Noto Serif SC', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .card-radius {
+        border-radius: 8px;
+      }
+      .icon-bg {
+        background-color: #F0E8DD;
+      }
+      .card-hover {
+        transition: all 0.3s ease;
+        cursor: pointer;
+      }
+      .card-hover:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 12px rgba(159, 126, 105, 0.1);
+      }
+      .text-shadow {
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .search-result-item {
+        @apply py-2 px-3 hover:bg-secondary/30 rounded transition-colors cursor-pointer;
+      }
+      .search-result-title {
+        @apply font-medium text-dark;
+      }
+      .search-result-type {
+        @apply text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded-full mt-1 inline-block;
+      }
+      .search-empty {
+        @apply py-4 text-center text-gray-500 text-sm;
+      }
+      .nav-hover {
+        @apply relative overflow-hidden transition-all duration-300 hover:text-primary;
+      }
+      .nav-hover::after {
+        @apply absolute bottom-0 left-0 w-0 h-0.5 bg-primary transition-all duration-300 content-[''];
+      }
+      .nav-hover:hover::after {
+        @apply w-full;
+      }
+    }
+  </style>
+  
+  <!-- 全局样式 -->
+  <style>
+    /* 导入中文字体 */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+    
+    body {
+      background-color: #FFF8E7;
+      scroll-behavior: smooth;
+      font-family: "Noto Sans SC", sans-serif;
+      color: #3E2723;
+    }
+    
+    /* 钩编纹理背景效果 */
+    .crochet-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5A2B' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F5DC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8B5A2B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6d4421;
+    }
+    
+    /* 淡入动画 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 导航栏滚动效果 */
+    #navbar {
+      transition: all 0.3s ease;
+    }
+    .navbar-scrolled {
+      background-color: rgba(255, 248, 231, 0.95);
+      box-shadow: 0 4px 12px rgba(139, 90, 43, 0.1);
+    }
+  </style>
+</head>
+<body class="font-sans text-dark crochet-bg">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full bg-light/95 shadow-md z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 md:py-4">
+      <div class="flex justify-between items-center">
+        <!-- Logo -->
+        <a href="#home" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <i class="fa fa-scissors text-white text-xl"></i>
+          </div>
+          <span class="text-xl font-serif font-bold">中原女工钩编</span>
+        </a>
+        
+        <!-- 桌面导航 -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="nav-hover">首页</a>
+          <a href="#skills" class="nav-hover">其他刺绣</a>
+        </nav>
+        
+        <!-- 右侧工具区（搜索+分享+日期） -->
+        <div class="flex items-center">
+          <!-- 搜索框 -->
+          <div class="search-trigger relative mr-4">
+            <div class="search-box flex items-center bg-light rounded-lg px-3 py-1.5 border border-gray-200">
+              <i class="fa fa-search text-gray-400 mr-2"></i>
+              <input placeholder="搜索作品、艺人或故事..." class="kkword kf_search bg-transparent border-none outline-none w-48 md:w-64 placeholder-gray-400 text-sm" type="text">
+              <button class="search-btn submit_base ml-2 text-primary hover:text-primary/80 transition-colors">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <!-- 搜索结果下拉框 -->
+            <div id="search-result-dropdown" class="absolute top-full right-0 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 hidden">
+              <div id="search-result-content" class="p-3 max-h-60 overflow-y-auto">
+                <!-- 搜索结果将在这里动态渲染 -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- 实时日期显示 -->
+          <div class="calendar-box hidden md:block" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+            <span id="current-date"></span>&nbsp;&nbsp;
+            <span id="current-week"></span>&nbsp;&nbsp;
+          </div>
+
+          <!-- 移动端菜单按钮 -->
+          <button id="menu-toggle" class="md:hidden text-dark text-2xl">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <!-- 移动端日期显示 -->
+        <div class="calendar-box py-2 border-b border-gray-100" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+          <span id="current-date-mobile"></span>&nbsp;&nbsp;
+          <span id="current-week-mobile"></span>&nbsp;&nbsp;
+        </div>
+        <a href="#home" class="nav-hover block py-2">首页</a>
+        <a href="#skills" class="nav-hover block py-2">其他刺绣</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="pt-24">
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-16 pb-24">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-10 md:gap-20 relative">
+          <!-- 左侧主图 - 可替换为代表性钩编作品图片 -->
+          <div class="md:w-1/2 fade-in">
+            <div class="rounded-lg overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500">
+              <img src="/yolov11/goubian/images/图片37.png" alt="精美的中原钩编作品展示" class="w-full h-auto">
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary rounded-full -z-10 hidden md:block"></div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 border-4 border-primary/30 rounded-full -z-10 hidden md:block"></div>
+          </div>
+          <!-- 右侧文本 -->
+          <div class="md:w-1/2 relative fade-in">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-serif font-bold leading-tight mb-6">
+              五大祥刘氏<br><span class="text-primary">传统旗袍</span>
+            </h1>
+            <p class="text-3xl md:text-3xl text-gray-700 mb-6">
+              介绍‌:
+            </p>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              开封市鼓楼区五大祥传统旗袍制作技艺是开封市市级非物质文化遗产代表性项目，由刘秋红作为第四代传承人负责，具有百年历史‌。该技艺融合黄河文化、宋文化等元素，以手工制版、立体裁剪和花式盘扣为特色，开发了香云纱手机包、丝巾等文创产品。五大祥刘氏传统旗袍制作技艺不仅包含23道主要工序，200多个具体步骤，强调手工制版和传统案工，而且还将《千里江山图》、《清明上河图》等宋文化元素与黄河文化结合，设计出“墨荷”旗袍等作品。
+            </p>             
+              <p class="text-3xl md:text-3xl text-gray-700 mb-6">
+              传承与推广:
+            </p>
+            <p class="text-3xl md:text-2xl text-gray-700 mb-10">
+              设立五大祥传统旗袍文化体验馆，定期举办女红传习、手工体验活动 。 ‌参与非遗进社区、进校园等推广活动，2019年获河南省第五届民间艺术展三等奖 。刘秋红为第四代传承人，2024年获开封市工匠称号，兼任开封技师学院特聘专家 。
+            </p>                        
+              <div class="flex gap-4">
+              <a href="#skills" class="px-6 py-3 bg-primary text-light rounded-lg hover:bg-primary/90 transition-colors shadow-md hover:shadow-lg">
+                了解其他刺绣
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  
+    <section id="skills" class="pt-24 md:pt-32 pb-16 md:pb-24 crochet-bg">
+        <div class="container mx-auto px-4">
+            <!-- 标题部分（保留原始颜色类） -->
+            <div class="text-center mx-auto mb-16 fade-in">
+                <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">汴绣</h2>
+                <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+                <p class="text-3xl text-gray-700 mb-10">
+                    汴绣，流传于河南省开封市的传统美术，国家级非物质文化遗产之一。
+                </p>
+                <p class="text-3xl text-gray-700 mb-6">
+                    介绍:
+                </p>
+                <p class="text-2xl text-gray-700 mb-10">
+                    汴绣也称“宋绣”，是流行于河南开封一带的传统刺绣艺术，因产生于北宋的都城汴京开封而得名。北宋时期汴京刺绣业兴盛，已达到较高的技艺水平，故《东京梦华录》中有“金碧相射，锦绣交辉”之誉。
+                </p>
+                <p class="text-3xl text-gray-700 mb-6">
+                    历史渊源:
+                </p>
+                <p class="text-2xl text-gray-700 mb-10">
+                    汴绣，起源于宋代的开封，是当时手工业中的一个重要行业。当时的开封是北宋的国都，被称作“汴梁”或“汴京”，所以这种刺绣就被称为“汴绣”了。汴绣历史悠久，以绣工精致、针法细密，图案严谨、格调高雅、色彩秀丽而著称，因此与苏绣，湘绣、粤绣、蜀绣一起合称为“中国五大名绣”。﻿
+                </p>     
+                <p class="text-3xl text-gray-700 mb-6">
+                    表现形式:
+                </p>
+                <p class="text-2xl text-gray-700 mb-10">
+                    汴绣在表现形式上深受中国画笔墨的影响，在绣线中加入了笔墨的效果，用色厚重，显示出了强烈的“书画情结”。避开直接绣制国画山水、文人字画题材的绣品不论，单就其绣制的人物类等一些“非书画”题材的绣品，都能找到“文人墨客”的影子，如汴绣《毛主席像》等，造型虚实得当，在细腻的表现中透着工笔的影子。﻿
+                </p> 
+                <p class="text-3xl text-gray-700 mb-6">
+                    历史传承与发展:
+                </p>
+                <p class="text-2xl text-gray-700 mb-10">
+                    北宋时期开封刺绣业兴盛，形成“闺绣画”体系，后因靖康之变逐渐衰落。1954年成立绣花合作小组，发展为开封汴绣厂，通过绣制《清明上河图》等经典作品重振技艺。2021年获评河南老字号，2025年参与河南老字号非遗文化周活动。
+                </p>                                                                                                         
+            </div>
+            
+            <div class="grid grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+                    <div class="relative">
+                        <img src="/yolov11/goubian/images/图片31.png" class="w-full h-96 object-cover">
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+                    <div class="relative">
+                        <img src="/yolov11/goubian/images/图片32.png" class="w-full h-full object-cover">
+                    </div>
+                </div>
+        </div>
+    </section>
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            尉氏县刺绣
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">尉氏汴绣</span>
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            介绍:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            尉氏汴绣从上世纪九十年代开始起，不断壮大，形成开封市最大汴绣加工基地，妥善安排下岗女工，农村富余劳动力达2000多人，年产值达4000万元。县城主要以“文萃汴绣”为中心，不断向城乡辐射，仅“文萃汴绣”一家就有近十家分厂。2006年10月，李文萃先后被河南省民间艺术家协会评“河南省工艺美术家”、“河南省工艺美术大师”2007年6月《光明日报》又对李文萃汴绣进行了报道，其绣品畅销国内外。
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            传承人:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            周慧娟另拜苏绣大师王建琴深造，将苏绣仿真绣与变绣融合，擅长双面秀、人物秀及修复古秀，作品多次获省级以上奖项，并建立“巧媳妇”培训基地，以培养绣娘5000余人。
+          </p>          
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            禹王台区刺绣
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">宋艺刺绣</span>
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            介绍:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            开封市禹王台区宋艺刺绣技艺的代表性传承人为何丽霞。她从事汴绣创作与传承三十余年，现为禹王台区非物质文化遗产宋艺刺绣技艺项目传承人。宋艺刺绣技艺源于北宋时期的开封，是汴绣(又称宋绣) 的一个地方分支，强调对宋代刺绣机的传承与再现。该项目以手工刺绣为核心。采用真丝底料和传统丝线。结合宋代书画，花鸟，人物等题材，运用平针、散套、滚针、蒙针等多种针法，追求以针代笔，以线代墨的艺术效果。
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            历史传承:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            何丽霞自1992年起从事刺绣工作，2005年在河南省手工制作职业技能竞赛中夺冠，后被评为“河南省工艺美术大师”，并于2012年成立宋艺刺绣工作室，专注于传统刺绣技艺的传承与创新。
+          </p>          
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            文化价值:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            宋艺刺绣技艺承载着北宋都城汴京（今开封）千年刺绣文化的基因，是宋秀技艺在当代的延续。该技艺擅长表现中国传统书画，山水，花鸟，人物等题材，作品层次丰富，色彩雅致，具有较高的艺术欣赏价值。﻿
+          </p>           
+        </div>
+      </div>
+    </section>
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            顺河回族区刺绣
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">人物肖像刺绣</span>
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            介绍:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            开封市顺河回族区的人物肖像刺绣属于市级非物质文化遗产，由《禅茶》茶艺、宋代茶事等传统技艺共同构成。 ‌该技艺以人物肖像为主题，通过刺绣技法展现人物形象，具有细腻的绣工和独特的艺术表现力。例如，《清明上河图》绣作曾以800多个栩栩如生的人物形象再现北宋风情，成为开封汴绣的代表性作品。
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            传承与发展:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            近年来，顺河回族区通过设立非遗传承实践基地（如素花宋绣研究所）推动技艺保护，并依托《古韵坊》等传统服饰制作技艺实现产业化发展。
+          </p>          
+        </div>
+      </div>
+    </section>    
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            鼓楼区刺绣
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">魏然汴绣</span>
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            介绍:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            魏然是开封市顺河回族区汴绣领域的代表性传承人，其汴绣作品以创新融合传统技法著称，多次获得国家级、省级奖项，并广泛应用于文创产品开发。 ‌魏然从事汴绣创作40余年，擅长将传统吉祥纹样与当代元素结合，作品题材涵盖宋代名画复刻、动物纹样、自然景观等。代表作包括《清明上河图》局部复刻、《百子团圆图》《雪树寒禽图》等，曾获第七届中国民间工艺品博览会金奖、全国非物质文化遗产传统技艺展“国匠杯”金项奖等奖项。
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            技艺创新:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            她在传统汴绣针法基础上研发乱针绣技法，填补了汴绣在该领域的空白。2019年以手工刺绣技能竞赛第一名成绩获评“河南省工艺美术行业技术能手”，2021年获“全国轻工技术能手”称号。
+          </p>          
+        </div>
+      </div>
+    </section>  
+
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            龙亭区刺绣
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">素娜刺绣</span>
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            介绍:
+          </p>
+          <p class="text-gray-700 mb-10 leading-relaxed">
+            素娜刺绣是龙亭区第一批区级非遗(传统技艺类)它是以汴绣针法绣制宋画、花鸟、人物，兼做双面绣，小件文创，设工作室培训绣娘，是龙亭区主推的“非遗+文创”示范点。
+          </p>        
+        </div>
+      </div>
+    </section>  
+    
+    <section id="skills" class="py-8">
+      <div class="max-w-8xl mx-auto px-4 md:px-8">
+        <div class="text-center mb-6">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold text-dark mb-3">
+            杞县刺绣
+          </h2>
+          <div class="w-16 h-1 bg-primary mx-auto mb-4"></div>
+        </div>
+        
+        <!-- 自适应宽度，去除固定最大宽度限制 -->
+        <div class="bg-white rounded-xl shadow-md p-6 md:p-8 w-full text-2xl">
+          <p class="text-gray-700 mb-4 leading-relaxed">
+            <span class="font-bold text-3xl">胡氏汴绣</span>
+          </p>
+          <p class="text-gray-700 mb-6 leading-relaxed">
+            传统美术类裴村店乡申报
+          </p>     
+        </div>
+      </div>
+    </section>    
+  </main>
+
+  <footer class="bg-dark text-light py-6 mt-12">
+    <div class="max-w-7xl mx-auto px-4 md:px-8">
+      <div class="text-center">
+        <p class="mb-3">© 2025 中原女工钩编 版权所有</p>
+        <p class="text-gray-400 text-sm">传承传统技艺 · 弘扬中华文化</p>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    // 滚动动画效果
+    document.addEventListener('DOMContentLoaded', function() {
+      // ========== 日期显示功能 ==========
+      function formatDate() {
+        const now = new Date();
+        // 定义星期数组
+        const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+        
+        // 获取年月日
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0');
+        const day = String(now.getDate()).padStart(2, '0');
+        // 获取星期
+        const week = weekDays[now.getDay()];
+        
+        // 格式化日期字符串
+        const dateStr = `${year}年${month}月${day}日`;
+        
+        // 填充到页面元素
+        const dateElement = document.getElementById('current-date');
+        const weekElement = document.getElementById('current-week');
+        const dateMobileElement = document.getElementById('current-date-mobile');
+        const weekMobileElement = document.getElementById('current-week-mobile');
+        
+        if (dateElement) dateElement.textContent = dateStr;
+        if (weekElement) weekElement.textContent = week;
+        if (dateMobileElement) dateMobileElement.textContent = dateStr;
+        if (weekMobileElement) weekMobileElement.textContent = week;
+      }
+      
+      // 初始化日期显示
+      formatDate();
+      // 每分钟更新一次（可选）
+      setInterval(formatDate, 60000);
+
+      // ========== 淡入动画 ==========
+      const fadeElements = document.querySelectorAll('.fade-in');
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      
+      fadeElements.forEach(element => {
+        observer.observe(element);
+      });
+
+      // ========== 导航栏滚动效果 ==========
+      const navbar = document.getElementById('navbar');
+      window.addEventListener('scroll', function() {
+        if (window.scrollY > 50) {
+          navbar.classList.add('navbar-scrolled');
+        } else {
+          navbar.classList.remove('navbar-scrolled');
+        }
+      });
+
+      // ========== 移动端菜单切换 ==========
+      const mobileMenuBtn = document.getElementById('menu-toggle');
+      const mobileMenu = document.getElementById('mobile-menu');
+      
+      mobileMenuBtn.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        // 切换图标
+        const icon = mobileMenuBtn.querySelector('i');
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        } else {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        }
+      });
+
+      // ========== 平滑滚动 ==========
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          const targetElement = document.querySelector(targetId);
+          
+          if (targetElement) {
+            // 关闭移动端菜单
+            mobileMenu.classList.add('hidden');
+            const icon = mobileMenuBtn.querySelector('i');
+            icon.classList.remove('fa-times');
+            icon.classList.add('fa-bars');
+            
+            // 平滑滚动
+            window.scrollTo({
+              top: targetElement.offsetTop - 100,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

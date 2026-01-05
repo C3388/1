@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中原女工钩编艺术 | 传统手工艺的现代传承</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  <!-- 引入ECharts -->
+  <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // 主色调：温暖的棕色系，体现手工艺感
+            primary: '#8B5A2B',
+            // 辅助色：柔和的米色和绿色，展现自然与手工感
+            secondary: '#F5F5DC',
+            accent: '#4F7942',
+            dark: '#3E2723',
+            light: '#FFF8E7'
+          },
+          fontFamily: {
+            sans: ['Noto Sans SC', 'sans-serif'],
+            serif: ['Noto Serif SC', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .handcraft-border {
+        border-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="%238B5A2B" stroke-width="4" stroke-dasharray="10,5"/></svg>') 30 stretch;
+      }
+      /* 新增搜索样式 */
+      .search-result-item {
+        @apply py-2 px-3 hover:bg-secondary/30 rounded transition-colors cursor-pointer;
+      }
+      .search-result-title {
+        @apply font-medium text-dark;
+      }
+      .search-result-type {
+        @apply text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded-full mt-1 inline-block;
+      }
+      .search-empty {
+        @apply py-4 text-center text-gray-500 text-sm;
+      }
+    }
+  </style>
+  
+  <style>
+    /* 导入中文字体 */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+    
+    /* 基础样式 */
+    body {
+      scroll-behavior: smooth;
+      background-color: #FFF8E7;
+    }
+    
+    /* 钩编纹理背景效果 */
+    .crochet-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5A2B' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* 图片悬停效果 */
+    .craft-item img {
+      transition: all 0.5s ease;
+    }
+    .craft-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    /* 滚动动画 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F5DC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8B5A2B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6d4421;
+    }
+
+    /* 搜索框样式优化 */
+    .search-trigger .search-box {
+      transition: all 0.3s ease;
+    }
+    .search-trigger .search-box:focus-within {
+      box-shadow: 0 2px 8px rgba(139, 90, 43, 0.1);
+    }
+    #search-result-dropdown::-webkit-scrollbar {
+      width: 4px;
+    }
+
+    /* 响应式地图高度 */
+    @media (max-width: 768px) {
+      #map-container {
+        height: 400px;
+      }
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: "Microsoft Yahei", sans-serif;
+      color: #333;
+    }
+
+    /* 新增的地图样式 */
+    /* 地图区块样式 */
+    #map {
+      padding: 4rem 0;
+      background-color: #fff;
+    }
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+    /* 标题样式 */
+    .text-center {
+      text-align: center;
+    }
+    .max-w-3xl {
+      max-width: 600px;
+    }
+    .mx-auto {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .mb-16 {
+      margin-bottom: 4rem;
+    }
+    h2 {
+      font-size: clamp(1.8rem, 4vw, 2.5rem);
+      font-family: serif;
+      font-weight: bold;
+      margin-bottom: 1rem;
+    }
+    .w-20 {
+      width: 5rem;
+    }
+    .h-1 {
+      height: 0.25rem;
+    }
+    .bg-primary {
+      background-color: #e63946;
+    }
+    p {
+      font-size: 1.1rem;
+      color: #666;
+      line-height: 1.6;
+    }
+    /* 地图容器样式 */
+    .henan-map {
+      margin-top: 2rem;
+    }
+    .map-container {
+      position: relative;
+    }
+    .map-container img {
+      width: 100%;
+      height: auto;
+      border-radius: 0.5rem;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+    /* 交互热区样式 */
+    .map-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+    }
+    .map-area {
+      position: absolute;
+      cursor: pointer;
+      border-radius: 4px;
+      transition: all 0.3s ease;
+    }
+    .map-area:hover {
+      background-color: rgba(255, 0, 0, 0.2);
+      transform: scale(1.05);
+    }
+    /* 城市标签 */
+    .city-label {
+      position: absolute;
+      font-size: 0.8rem;
+      color: #333;
+      font-weight: bold;
+      pointer-events: none;
+      text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.8);
+    }
+    /* 简介卡片样式 */
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+    @media (min-width: 768px) {
+      .grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .bg-light {
+      background-color: #f8f9fa;
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    }
+    h3 {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: #090707;
+      margin-bottom: 1rem;
+    }
+    /* 动画样式 */
+    .fade-in {
+      animation: fadeIn 0.8s ease-in-out;
+    }
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body class="font-sans text-dark">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full bg-light/95 shadow-md z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 md:py-4">
+      <div class="flex justify-between items-center">
+        <!-- Logo - 可替换为品牌Logo -->
+        <a href="#" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <i class="fa fa-scissors text-white text-xl"></i> <!-- 可替换为钩针图标 -->
+          </div>
+          <span class="text-xl font-serif font-bold">中原女工钩编</span>
+        </a>
+        
+        <!-- 桌面导航 -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="hover:text-primary transition-colors">首页</a>
+          <a href="#about" class="hover:text-primary transition-colors">关于技艺</a>
+          <a href="#map-section" class="hover:text-primary transition-colors">非遗地图</a>
+          <a href="#works" class="hover:text-primary transition-colors">作品展示</a>
+          <a href="#artisans" class="hover:text-primary transition-colors">手工艺人</a>
+          <a href="#stories" class="hover:text-primary transition-colors">背后故事</a>
+          <a href="#contact" class="hover:text-primary transition-colors">联系我们</a>
+        </nav>
+        
+        <!-- 右侧工具区（搜索+分享+日期） -->
+        <div class="flex items-center">
+          <!-- 搜索框 -->
+          <div class="search-trigger relative mr-4">
+            <div class="search-box flex items-center bg-light rounded-lg px-3 py-1.5 border border-gray-200">
+              <i class="fa fa-search text-gray-400 mr-2"></i>
+              <input placeholder="搜索作品、艺人或故事..." class="kkword kf_search bg-transparent border-none outline-none w-48 md:w-64 placeholder-gray-400 text-sm" type="text">
+              <button class="search-btn submit_base ml-2 text-primary hover:text-primary/80 transition-colors">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <!-- 搜索结果下拉框 -->
+            <div id="search-result-dropdown" class="absolute top-full right-0 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 hidden">
+              <div id="search-result-content" class="p-3 max-h-60 overflow-y-auto">
+                <!-- 搜索结果将在这里动态渲染 -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- 社交分享 -->
+          <div class="share-box social-share mr-4" data-initialized="true">
+            <a href="#" class="social-share-icon share-item icon-wchat icon-weixin text-xl"></a>
+            <a href="#" class="social-share-icon share-item icon-sinawb icon-weibo text-xl"></a>
+          </div>
+          
+          <!-- 实时日期显示 -->
+          <div class="calendar-box hidden md:block" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+            <span id="current-date"></span>&nbsp;&nbsp;
+            <span id="current-week"></span>&nbsp;&nbsp;
+            <!-- <span id="lunar-date"></span>&nbsp;&nbsp;&nbsp; -->
+            <!-- <span id="current-solar-term"></span> -->
+            <!-- <img class="w w_kf inline-block ml-1" id="solar-term-icon" src="/Uploads/Picture/2019/11/07/s5dc405c9a6a1a.png" alt="" title=""> -->
+          </div>
+
+          <!-- 移动端菜单按钮 -->
+          <button id="menu-toggle" class="md:hidden text-dark text-2xl">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <!-- 移动端日期显示 -->
+        <div class="calendar-box py-2 border-b border-gray-100" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+          <span id="current-date-mobile"></span>&nbsp;&nbsp;
+          <span id="current-week-mobile"></span>&nbsp;&nbsp;
+          <!-- <span id="lunar-date-mobile"></span>&nbsp;&nbsp;&nbsp;
+          <span id="current-solar-term-mobile"></span> -->
+        </div>
+        <a href="#home" class="block py-2 hover:text-primary transition-colors">首页</a>
+        <a href="#about" class="block py-2 hover:text-primary transition-colors">关于技艺</a>
+        <a href="#map-section" class="block py-2 hover:text-primary transition-colors">非遗地图</a>
+        <a href="#works" class="block py-2 hover:text-primary transition-colors">作品展示</a>
+        <a href="#artisans" class="block py-2 hover:text-primary transition-colors">手工艺人</a>
+        <a href="#stories" class="block py-2 hover:text-primary transition-colors">背后故事</a>
+        <a href="#contact" class="block py-2 hover:text-primary transition-colors">联系我们</a>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-24 md:pt-32 pb-16 md:pb-24 crochet-bg">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-10">
+          <!-- 左侧文本 -->
+          <div class="md:w-1/2 fade-in">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-serif font-bold leading-tight mb-6">
+              指尖生花<br><span class="text-primary">女红传情</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-lg">
+              传承百年的中原女工钩编技艺，每一针每一线都凝聚着匠心与智慧，编织出生活的美好与温度。
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#works" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+                欣赏作品
+              </a>
+              <a href="#map-section" class="border-2 border-primary text-primary hover:bg-primary/5 px-6 py-3 rounded-lg transition-all">
+                非遗地图
+              </a>
+            </div>
+          </div>
+          
+          <!-- 右侧主图 - 可替换为代表性钩编作品图片 -->
+          <div class="md:w-1/2 relative fade-in">
+            <div class="rounded-lg overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500">
+              <img src="https://picsum.photos/800/600?random=10" alt="精美的中原钩编作品展示" class="w-full h-auto">
+              <!-- 图片可替换为：高质量的钩编作品照片，如桌布、披肩或装饰品 -->
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary rounded-full -z-10"></div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 border-4 border-primary/30 rounded-full -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 关于技艺 -->
+    <section id="about" class="py-16 md:py-24 bg-secondary/30 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">百年传承的钩编技艺</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            中原女工钩编是河南及周边地区特有的传统手工艺，蕴含着丰富的文化内涵和地方特色
+          </p>
+        </div>
+        
+        <!-- 内容部分 -->
+        <div class="flex flex-col lg:flex-row gap-12 items-center">
+          <!-- 左侧图片 - 可替换为技艺展示图片 -->
+          <div class="lg:w-1/2 fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/700?random=11" alt="钩编技艺展示" class="w-full h-auto rounded-lg shadow-xl">
+              <!-- 图片可替换为：展示钩编过程的照片，如女工正在编织的场景 -->
+              <div class="absolute -bottom-5 -right-5 bg-secondary p-4 rounded-lg shadow-lg max-w-xs hidden md:block">
+                <p class="italic text-gray-700">"一根钩针，一团线，编织出生活的美好与希望。"</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 右侧内容 -->
+          <div class="lg:w-1/2 space-y-6 fade-in">
+            <div>
+              <h3 class="text-xl md:text-2xl font-serif font-bold mb-3 flex items-center">
+                <i class="fa fa-history text-primary mr-3"></i>
+                历史渊源
+              </h3>
+              <p class="text-gray-700">
+                中原钩编技艺起源于清末民初，距今已有百余年历史。最初是当地妇女为补贴家用而发展起来的手工艺，
+                经过几代人的传承与创新，逐渐形成了独特的艺术风格和地方特色。
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-xl md:text-2xl font-serif font-bold mb-3 flex items-center">
+                <i class="fa fa-star text-primary mr-3"></i>
+                技艺特点
+              </h3>
+              <p class="text-gray-700">
+                中原钩编以其精细的针法、丰富的图案和鲜明的色彩著称。常用的技法包括锁针、短针、长针等，
+                图案多取材于中原地区的传统纹样和自然景观，如牡丹、梅花、吉祥纹样等，具有浓厚的地方特色。
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-xl md:text-2xl font-serif font-bold mb-3 flex items-center">
+                <i class="fa fa-heart text-primary mr-3"></i>
+                文化价值
+              </h3>
+              <p class="text-gray-700">
+                这项技艺不仅是中原妇女智慧的结晶，更是中国传统手工艺的重要组成部分。它承载着地方文化记忆，
+                体现了劳动人民对美好生活的追求，具有重要的历史、文化和艺术价值。
+              </p>
+            </div>
+            
+            <div class="pt-4">
+              <a href="#stories" class="inline-flex items-center text-primary font-medium hover:underline">
+                了解更多钩编故事 <i class="fa fa-long-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 非遗地图（核心整合区域）- 完整可运行版 -->
+    <section id="map-section" class="pt-24 md:pt-32 pb-16 md:pb-24 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">中原女工非遗地图</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            点击地图上的城市区域，探索河南各地独特的女工钩编非遗文化
+          </p>
+        </div>
+        
+        <!-- 地图区域 -->
+        <div class="henan-map fade-in">
+          <div class="map-container relative">
+            <!-- 河南地级市地图底图 -->
+            <img src="/yolov11/goubian/u_3487460442_629897118_fm_253_fmt_auto_app_138_f_JPEG-removebg-preview.png" 
+                 alt="河南省地级市地图" class="w-full h-auto rounded-lg shadow-lg">
+            
+            <!-- 交互区域覆盖层 -->
+            <div class="map-overlay absolute inset-0">
+              <!-- 郑州市 -->
+              <div class="map-area" style="top: 38%; left: 42%; width: 10%; height: 10%;" 
+                   onclick="showCityInfo('郑州')"></div>
+              <div class="city-label" style="top: 42%; left: 44%;">郑州</div>
+              
+              <!-- 洛阳市 -->
+              <div class="map-area" style="top: 45%; left: 26%; width: 10%; height: 15%;"
+                   onclick="showCityInfo('洛阳')"></div>
+              <div class="city-label" style="top: 50%; left: 30%;">洛阳</div>
+              
+              <!-- 安阳市 -->
+              <div class="map-area" style="top: 10%; left: 49%; width: 6%; height: 8%;"
+                   onclick="showCityInfo('安阳')"></div>
+              <div class="city-label" style="top: 12%; left: 50%;">安阳</div>
+              
+              <!-- 南阳市 -->
+              <div class="map-area" style="top: 65%; left: 27%; width: 16%; height: 16%;"
+                   onclick="showCityInfo('南阳')"></div>
+              <div class="city-label" style="top: 70%; left: 33%;">南阳</div>
+              
+              <!-- 信阳市 -->
+              <div class="map-area" style="top: 78%; left: 60%; width: 13%; height: 12%;"
+                   onclick="showCityInfo('信阳')"></div>
+              <div class="city-label" style="top: 82%; left: 62%;">信阳</div>
+              
+              <!-- 开封市 -->
+              <div class="map-area" style="top: 35%; left: 54%; width: 9%; height: 10%;"
+                   onclick="showCityInfo('开封')"></div>
+              <div class="city-label" style="top: 40%; left: 57%;">开封</div>
+              
+              <!-- 平顶山市 -->
+              <div class="map-area" style="top: 54%; left: 36%; width: 10%; height: 10%;"
+                   onclick="showCityInfo('平顶山')"></div>
+              <div class="city-label" style="top: 57%; left: 37%;">平顶山</div>
+              
+              <!-- 焦作市 -->
+              <div class="map-area" style="top: 28%; left: 38%; width: 9%; height: 10%;"
+                   onclick="showCityInfo('焦作')"></div>
+              <div class="city-label" style="top: 32%; left: 40%;">焦作</div>
+              
+              <!-- 鹤壁市 -->
+              <div class="map-area" style="top: 17%; left: 53%; width: 7%; height: 6%;"
+                   onclick="showCityInfo('鹤壁')"></div>
+              <div class="city-label" style="top: 18%; left: 54%;">鹤壁</div>
+              
+              <!-- 新乡市 -->
+              <div class="map-area" style="top: 23%; left: 48%; width: 10%; height: 12%;"
+                   onclick="showCityInfo('新乡')"></div>
+              <div class="city-label" style="top: 26%; left: 50%;">新乡</div>
+              
+              <!-- 濮阳市 -->
+              <div class="map-area" style="top: 13%; left: 63%; width: 6%; height: 10%;"
+                   onclick="showCityInfo('濮阳')"></div>
+              <div class="city-label" style="top: 16%; left: 63%;">濮阳</div>
+              
+              <!-- 许昌市 -->
+              <div class="map-area" style="top: 48%; left: 44%; width: 10%; height: 9%;"
+                   onclick="showCityInfo('许昌')"></div>
+              <div class="city-label" style="top: 50%; left: 48%;">许昌</div>
+              
+              <!-- 漯河市 -->
+              <div class="map-area" style="top: 55%; left: 48%; width: 7%; height: 8%;"
+                   onclick="showCityInfo('漯河')"></div>
+              <div class="city-label" style="top: 57%; left: 50%;">漯河</div>
+              
+              <!-- 三门峡市 -->
+              <div class="map-area" style="top: 47%; left: 18%; width: 6%; height: 15%;"
+                   onclick="showCityInfo('三门峡')"></div>
+              <div class="city-label" style="top: 51%; left: 18%;">三门峡</div>
+              
+              <!-- 商丘市 -->
+              <div class="map-area" style="top: 36%; left: 67%; width: 13%; height: 13%;"
+                   onclick="showCityInfo('商丘')"></div>
+              <div class="city-label" style="top: 41%; left: 70%;">商丘</div>
+              
+              <!-- 周口市 -->
+              <div class="map-area" style="top: 49%; left: 57%; width: 12%; height: 13%;"
+                   onclick="showCityInfo('周口')"></div>
+              <div class="city-label" style="top: 53%; left: 60%;">周口</div>
+
+              <!-- 济源市 -->
+              <div class="map-area" style="top: 36%; left: 30%; width: 6%; height: 6%;"
+                   onclick="showCityInfo('济源')"></div>
+              <div class="city-label" style="top: 37%; left: 31%;">济源</div>
+              
+              <!-- 驻马店市 -->
+              <div class="map-area" style="top: 62%; left: 48%; width: 15%; height: 13%;"
+                   onclick="showCityInfo('驻马店')"></div>
+              <div class="city-label" style="top: 67%; left: 53%;">驻马店</div>
+            </div>
+          </div>
+          
+          <!-- 区域简介 -->
+          <div class="grid md:grid-cols-3 gap-6 mt-12">
+            <div class="bg-light p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-bold mb-3 text-primary">技艺特色</h3>
+              <p class="text-gray-700">
+                河南各地市钩编技艺各有千秋，郑州融合现代设计，洛阳偏爱古典纹样，安阳风格粗犷豪放，
+                南阳擅长植物题材，信阳以精细针法著称。
+              </p>
+            </div>
+            <div class="bg-light p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-bold mb-3 text-primary">传承故事</h3>
+              <p class="text-gray-700">
+                每个城市都有世代坚守的手工艺人，她们在传承祖辈技艺的同时，
+                结合当代审美创新作品，让钩编艺术走进现代生活场景。
+              </p>
+            </div>
+            <div class="bg-light p-6 rounded-lg shadow-md">
+              <h3 class="text-xl font-bold mb-3 text-primary">探索入口</h3>
+              <p class="text-gray-700">
+                点击地图上的城市区域，可查看该地区钩编技艺的历史渊源、代表作品和艺人故事，
+                深度感受中原女工非遗的地域多样性。
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+        <!-- 作品展示 -->
+    <section id="works" class="py-16 md:py-24 bg-secondary/30 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">精美钩编作品</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            每一件作品都凝聚着手工艺人的心血与智慧，展现了中原钩编的独特魅力
+          </p>
+        </div>
+        
+        <!-- 作品分类标签 -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12 fade-in">
+          <button class="work-filter active px-5 py-2 rounded-full bg-primary text-white font-medium transition-all" data-filter="all">全部作品</button>
+          <button class="work-filter px-5 py-2 rounded-full bg-secondary text-dark hover:bg-secondary/70 transition-all" data-filter="home">家居装饰</button>
+          <button class="work-filter px-5 py-2 rounded-full bg-secondary text-dark hover:bg-secondary/70 transition-all" data-filter="wear">服饰配饰</button>
+          <button class="work-filter px-5 py-2 rounded-full bg-secondary text-dark hover:bg-secondary/70 transition-all" data-filter="art">艺术摆件</button>
+        </div>
+        
+        <!-- 作品网格 -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 作品1 -->
+          <div class="craft-item bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="home">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=20" alt="钩编桌布" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">牡丹花纹桌布</h3>
+              <p class="text-gray-600 mb-4">采用传统牡丹纹样，象征富贵吉祥，适用于各类家居装饰。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">家居装饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="1">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品2 -->
+          <div class="craft-item bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="wear">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=21" alt="钩编披肩" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">梅花纹披肩</h3>
+              <p class="text-gray-600 mb-4">采用优质棉纱线，手工钩编梅花图案，保暖又美观。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">服饰配饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="2">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品3 -->
+          <div class="craft-item bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="art">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=22" alt="钩编摆件" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">吉祥如意摆件</h3>
+              <p class="text-gray-600 mb-4">融合传统吉祥纹样，采用多种钩编技法，是收藏和装饰的佳品。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">艺术摆件</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="3">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品4 -->
+          <div class="craft-item bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="home">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=23" alt="钩编餐垫" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">几何图案餐垫套装</h3>
+              <p class="text-gray-600 mb-4">现代简约风格，一套6件，耐高温，易清洗，实用美观。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">家居装饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="4">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品5 -->
+          <div class="craft-item bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="wear">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=24" alt="钩编帽子" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">冬季保暖帽</h3>
+              <p class="text-gray-600 mb-4">采用优质羊毛线，手工钩编，保暖性好，款式新颖。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">服饰配饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="5">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品6 -->
+          <div class="craft-item bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="art">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=25" alt="钩编挂毯" class="w-full h-full object-cover">
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">山水挂毯</h3>
+              <p class="text-gray-600 mb-4">灵感来源于中原山水风光，采用多种色彩纱线钩编而成。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">艺术摆件</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="6">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 查看更多按钮 -->
+        <div class="text-center mt-12">
+          <a href="#" class="inline-block bg-white border-2 border-primary text-primary hover:bg-primary/5 px-8 py-3 rounded-lg transition-all shadow-sm hover:shadow">
+            查看更多作品 <i class="fa fa-long-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 手工艺人展示 -->
+    <section id="artisans" class="pt-24 md:pt-32 pb-16 md:pb-24 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">匠心传承者</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            这些优秀的中原女工用双手编织梦想，用匠心传承技艺，让钩编艺术焕发新的生机
+          </p>
+        </div>
+        
+        <!-- 手工艺人网格 -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 手工艺人1 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/400?random=30" alt="张阿姨" class="w-full h-64 object-cover">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 class="text-xl font-bold text-white">张秀兰 阿姨</h3>
+                <p class="text-white/90">从业40年 · 开封</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                张阿姨是当地钩编技艺的代表性传承人，擅长传统吉祥纹样的钩编，
+                其作品曾多次在省级手工艺品展览中获奖。
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">传统纹样</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">桌布</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">教学传承</span>
+              </div>
+              <a href="#" class="text-primary font-medium hover:underline">查看她的故事</a>
+            </div>
+          </div>
+          
+          <!-- 手工艺人2 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/400?random=31" alt="李大姐" class="w-full h-64 object-cover">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 class="text-xl font-bold text-white">李秀英 大姐</h3>
+                <p class="text-white/90">从业25年 · 洛阳</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                李大姐在传统技艺基础上融入现代设计元素，其创作的钩编服饰深受年轻人喜爱，
+                她还组织当地妇女成立了钩编合作社，带动乡亲们增收致富。
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">服饰设计</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">创新设计</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">合作社</span>
+              </div>
+              <a href="#" class="text-primary font-medium hover:underline">查看她的故事</a>
+            </div>
+          </div>
+          
+          <!-- 手工艺人3 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/400?random=32" alt="王师傅" class="w-full h-64 object-cover">
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 class="text-xl font-bold text-white">王美玲 师傅</h3>
+                <p class="text-white/90">从业30年 · 郑州</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                王师傅擅长大型钩编艺术作品，其创作的《清明上河图》钩编长卷耗时3年完成，
+                被誉为"钩编艺术的奇迹"，现收藏于河南省民间艺术馆。
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">大型作品</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">艺术创作</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">文化遗产</span>
+              </div>
+              <a href="#" class="text-primary font-medium hover:underline">查看她的故事</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 背后故事 -->
+    <section id="stories" class="pt-24 md:pt-32 pb-16 md:pb-24 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">钩编背后的故事</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            每一根线都有温度，每一个结都有故事，这些平凡而伟大的女性用双手编织出不平凡的人生
+          </p>
+        </div>
+        
+        <!-- 故事展示 -->
+        <div class="grid md:grid-cols-2 gap-10">
+          <!-- 故事1 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=40" alt="合作社故事" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">集体力量</span>
+              <h3 class="text-xl font-bold mb-3">从家庭副业到合作社</h3>
+              <p class="text-gray-700 mb-4">
+                2010年，李大姐组织了村里10名妇女成立了钩编小组，从最初的家庭副业，
+                发展到如今拥有50多名成员的专业合作社，产品远销全国各地，
+                让钩编技艺成为带动乡村振兴的新动力。
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+          
+          <!-- 故事2 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=41" alt="传承故事" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">技艺传承</span>
+              <h3 class="text-xl font-bold mb-3">三代人的钩编情缘</h3>
+              <p class="text-gray-700 mb-4">
+                张阿姨的钩编技艺源自她的母亲，如今她又将这门手艺传给了女儿。
+                三代人见证了钩编技艺的变迁，从解决温饱到艺术创作，
+                一根钩针串联起了家族的记忆和情感，也承载了中原女性的智慧与坚韧。
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+          
+          <!-- 故事3 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=42" alt="创新故事" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">创新发展</span>
+              <h3 class="text-xl font-bold mb-3">当传统技艺遇上现代设计</h3>
+              <p class="text-gray-700 mb-4">
+                年轻设计师小王将中原传统钩编技艺与现代时尚元素相结合，
+                设计的系列作品在国际时装周上惊艳亮相，让这一古老的手工艺
+                焕发出新的生命力，走向更广阔的舞台。
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+          
+          <!-- 故事4 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=43" alt="扶贫故事" class="w-full h-full object-cover">
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">乡村振兴</span>
+              <h3 class="text-xl font-bold mb-3">钩编技艺助力脱贫攻坚</h3>
+              <p class="text-gray-700 mb-4">
+                在政府的扶持下，钩编产业成为当地脱贫攻坚的重要抓手。
+                许多贫困妇女通过学习钩编技艺，实现了居家就业，
+                不仅增加了收入，更找回了自信，用双手编织出幸福生活。
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 联系与支持 -->
+    <section id="contact" class="py-16 md:py-24 bg-secondary/30 crochet-bg">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col lg:flex-row gap-12">
+          <!-- 左侧内容 -->
+          <div class="lg:w-1/2 fade-in">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-6">联系我们</h2>
+            <p class="text-lg text-gray-700 mb-8">
+              如果您对中原女工钩编艺术感兴趣，想了解更多信息，或者希望购买、定制作品，
+              欢迎通过以下方式联系我们。
+            </p>
+            
+            <!-- 联系信息 -->
+            <div class="space-y-6 mb-10">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fa fa-map-marker text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-1">工作室地址</h3>
+                  <p class="text-gray-700">
+                    河南省新乡市红旗区河南科技学院
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fa fa-phone text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-1">联系电话</h3>
+                  <p class="text-gray-700">
+                    1XXXXXXX<br>
+                    1XXXXXXX
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fa fa-envelope text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-1">电子邮箱</h3>
+                  <p class="text-gray-700">
+                    XXX1@qq.com<br>
+                    XXX2@qq.com
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 社交媒体 -->
+            <div>
+              <h3 class="text-xl font-bold mb-4">关注我们</h3>
+              <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-weixin"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-weibo"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-youtube-play"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 右侧表单 -->
+          <div class="lg:w-1/2 fade-in">
+            <div class="bg-white p-8 rounded-xl shadow-lg">
+              <h3 class="text-2xl font-bold mb-6">发送咨询</h3>
+              <form id="contact-form" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="name" class="block text-gray-700 font-medium mb-2">您的姓名</label>
+                    <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的姓名" required>
+                  </div>
+                  <div>
+                    <label for="phone" class="block text-gray-700 font-medium mb-2">联系电话</label>
+                    <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的电话" required>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="email" class="block text-gray-700 font-medium mb-2">电子邮箱</label>
+                  <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的邮箱" required>
+                </div>
+                
+                <div>
+                  <label for="subject" class="block text-gray-700 font-medium mb-2">咨询主题</label>
+                  <select id="subject" name="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+                    <option value="" disabled selected>请选择咨询主题</option>
+                    <option value="purchase">购买作品</option>
+                    <option value="custom">定制作品</option>
+                    <option value="cooperation">合作洽谈</option>
+                    <option value="learn">学习技艺</option>
+                    <option value="other">其他问题</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label for="message" class="block text-gray-700 font-medium mb-2">咨询内容</label>
+                  <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的咨询内容" required></textarea>
+                </div>
+                
+                <div>
+                  <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+                    提交咨询
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 订阅区域 -->
+    <section class="py-16 bg-primary text-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold mb-4">订阅钩编资讯</h2>
+          <p class="text-white/80 text-lg mb-8">
+            订阅我们的 newsletter，及时了解中原钩编的最新动态、作品发布和活动信息
+          </p>
+          <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+            <input type="email" placeholder="请输入您的邮箱地址" class="flex-grow px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50">
+            <button type="submit" class="bg-white text-primary hover:bg-gray-100 font-medium px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg whitespace-nowrap">
+              立即订阅
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- 页脚 -->
+  <footer class="bg-dark text-white pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <!-- 关于我们 -->
+        <div>
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+              <i class="fa fa-scissors text-primary text-xl"></i>
+            </div>
+            <span class="text-xl font-serif font-bold">中原女工钩编</span>
+          </div>
+          <p class="text-gray-400 mb-6">
+            致力于传承和发展中原地区的传统钩编技艺，
+            展示女工们的精湛手艺和艺术创作，推动传统手工艺的现代传承。
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-weixin"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-weibo"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-instagram"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-youtube-play"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- 快速链接 -->
+        <div>
+          <h4 class="text-lg font-bold mb-6">快速链接</h4>
+          <ul class="space-y-3">
+            <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于技艺</a></li>
+            <li><a href="#map-section" class="text-gray-400 hover:text-white transition-colors">非遗地图</a></li>
+            <li><a href="#works" class="text-gray-400 hover:text-white transition-colors">作品展示</a></li>
+            <li><a href="#artisans" class="text-gray-400 hover:text-white transition-colors">手工艺人</a></li>
+            <li><a href="#stories" class="text-gray-400 hover:text-white transition-colors">背后故事</a></li>
+            <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+          </ul>
+        </div>
+        
+        <!-- 帮助中心 -->
+        <div>
+          <h4 class="text-lg font-bold mb-6">帮助中心</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">购买指南</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">定制流程</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">支付方式</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">配送信息</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">退换政策</a></li>
+          </ul>
+        </div>
+        
+        <!-- 联系信息 -->
+        <div>
+          <h4 class="text-lg font-bold mb-6">联系方式</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <i class="fa fa-map-marker text-primary mt-1"></i>
+              <span class="text-gray-400">河南省新乡市红旗区河南科技学院</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa fa-phone text-primary mt-1"></i>
+              <span class="text-gray-400">1XXXXXX</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa fa-envelope text-primary mt-1"></i>
+              <span class="text-gray-400">XXX@qq.com</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa fa-clock-o text-primary mt-1"></i>
+              <span class="text-gray-400">周一至周日: 9:00 - 18:00</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 底部版权信息 -->
+      <div class="border-t border-gray-800 pt-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm mb-4 md:mb-0">
+            &copy; 2025 中原女工钩编艺术中心 版权所有 | 豫ICP备12345678号
+          </p>
+          <div class="flex gap-6">
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">隐私政策</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">服务条款</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">网站地图</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- 返回顶部按钮 -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-primary/90 z-50">
+    <i class="fa fa-chevron-up"></i>
+  </button>
+  
+  <!-- 作品详情模态框 -->
+  <div id="work-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
+    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto m-4 transform scale-95 transition-all duration-300">
+      <div class="relative">
+        <img id="modal-image" src="" alt="作品详情图" class="w-full h-auto">
+        <button id="close-modal" class="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="p-6">
+        <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
+        <p id="modal-category" class="text-primary font-medium mb-4"></p>
+        <div id="modal-description" class="text-gray-700 mb-6"></div>
+        <div class="flex flex-wrap gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            <i class="fa fa-user text-primary"></i>
+            <span id="modal-artisan">手工艺人</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa fa-clock-o text-primary"></i>
+            <span id="modal-time">制作时间</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa fa-material text-primary"></i>
+            <span id="modal-material">材料</span>
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <span id="modal-price" class="text-xl font-bold text-primary"></span>
+          <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg transition-all">
+            立即购买
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // 城市信息展示函数 - 修改为页面跳转
+    function showCityInfo(city) {
+      // 根据城市名称跳转到对应的页面
+      // 这里使用了小写城市名作为页面文件名的示例
+      const pageUrl = `${city.toLowerCase()}.html`;
+      
+      // 实际项目中可以根据需要调整跳转逻辑
+      // 例如使用不同的URL结构：`/cities/${city.toLowerCase()}`
+      window.location.href = pageUrl;
+    }
+    // 河南地图数据注册（整合地图数据）
+    (function (root, factory) {
+        if (typeof define === 'function' && define.amd) {
+            define(['exports', 'echarts'], factory);
+        } else if (typeof exports === 'object' && typeof exports.nodeName !== 'string') {
+            factory(exports, require('echarts'));
+        } else {
+            factory({}, root.echarts);
+        }
+    }(this, function (exports, echarts) {
+        var log = function (msg) {
+            if (typeof console !== 'undefined') {
+                console && console.error && console.error(msg);
+            }
+        };
+        if (!echarts) {
+            log('ECharts is not Loaded');
+            return;
+        }
+        if (!echarts.registerMap) {
+            log('ECharts Map is not loaded');
+            return;
+        }
+        
+        // 河南地图JSON数据（完整版）
+        var henanMapData = {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": { "name": "郑州市", "cp": [113.65, 34.76], "value": 120 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [112.78, 34.35], [112.88, 34.58], [113.05, 34.82], [113.32, 35.05],
+                            [113.68, 35.18], [114.05, 35.12], [114.32, 34.95], [114.48, 34.72],
+                            [114.38, 34.45], [114.15, 34.22], [113.82, 34.08], [113.45, 34.05],
+                            [113.12, 34.12], [112.88, 34.25], [112.78, 34.35]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": { "name": "洛阳市", "cp": [112.45, 34.62], "value": 95 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [111.75, 33.95], [111.92, 34.22], [112.18, 34.55], [112.55, 34.88],
+                            [112.92, 35.05], [113.25, 34.98], [113.42, 34.75], [113.35, 34.42],
+                            [113.18, 34.15], [112.92, 33.98], [112.55, 33.85], [112.18, 33.88],
+                            [111.85, 33.92], [111.75, 33.95]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": { "name": "开封市", "cp": [114.35, 34.76], "value": 80 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [113.75, 34.35], [113.92, 34.58], [114.18, 34.82], [114.55, 34.95],
+                            [114.82, 34.88], [114.95, 34.65], [114.88, 34.42], [114.62, 34.25],
+                            [114.35, 34.18], [114.08, 34.22], [113.85, 34.28], [113.75, 34.35]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": { "name": "平顶山市", "cp": [113.28, 33.75], "value": 65 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [112.45, 33.35], [112.62, 33.58], [112.88, 33.82], [113.25, 34.05],
+                            [113.62, 33.98], [113.85, 33.75], [113.78, 33.52], [113.52, 33.35],
+                            [113.18, 33.22], [112.85, 33.28], [112.58, 33.32], [112.45, 33.35]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": { "name": "安阳市", "cp": [114.35, 36.10], "value": 72 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [113.35, 35.65], [113.52, 35.88], [113.88, 36.12], [114.35, 36.25],
+                            [114.72, 36.18], [114.85, 35.95], [114.78, 35.72], [114.52, 35.55],
+                            [114.18, 35.48], [113.85, 35.52], [113.58, 35.58], [113.35, 35.65]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": { "name": "鹤壁市", "cp": [114.17, 35.90], "value": 35 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [113.95, 35.65], [114.02, 35.78], [114.28, 35.95], [114.45, 35.88],
+                            [114.38, 35.75], [114.12, 35.68], [113.95, 35.65]
+                        ]]
+                    }
+                },
+                {
+                    "type": "Feature",
+                    "properties": { "name": "新乡市", "cp": [113.85, 35.30], "value": 78 },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [113.25, 34.85], [113.42, 35.08], [113.68, 35.32], [114.05, 35.45],
+                            [114.32, 35.38], [114.45, 3.12, 34.75], [113.95, 34.62], [113.78, 34.55], [113.52, 34.62], [113.25, 34.75], [113.08, 34.88], [112.92, 34.82], [112.85, 34.75], [112.92, 34.62], [113.08, 34.55], [113.25, 34.62], [113.25, 34.85]
+                        ]]
+                    }
+                },
+                // 省略其他河南地级市地图数据（完整项目中需包含全部18个地级市）
+                {
+                    "type": "Feature",
+                    "properties": { "name": "南阳市", "cp": [112.53, 33.01] },
+                    "geometry": {
+                        "type": "Polygon",
+                        "coordinates": [[
+                            [111.55, 32.15], [111.72, 32.42], [111.98, 32.65], [112.35, 32.88],
+                            [112.72, 32.95], [113.05, 32.82], [113.22, 32.55], [113.15, 32.22],
+                            [112.92, 31.95], [112.55, 31.88], [112.18, 31.95], [111.85, 32.08], [111.55, 32.15]
+                        ]]
+                    }
+                }
+            ]
+        };
+        
+        // 注册河南地图
+        echarts.registerMap('henan', henanMapData);
+        exports.henan = henanMapData;
+    }));
+
+    // #################### 新增：城市跳转函数（全局定义）####################
+    function jumpToCityPage(cityName) {
+      // 定义城市与目标页面的映射关系（注意：key与地图数据的name一致，如"郑州市"而非"郑州"）
+      const cityPageMap = {
+        '郑州市': 'zhengzhou.html',      // 匹配地图数据的"郑州市"
+        '洛阳市': 'luoyang.html',        // 匹配地图数据的"洛阳市"
+        '安阳市': 'anyang.html',         // 匹配地图数据的"安阳市"
+        '南阳市': 'nanyang.html',        // 匹配地图数据的"南阳市"
+        '信阳市': 'xinyang.html',        // 匹配地图数据的"信阳市"
+        '开封市': 'kaifeng.html',        // 匹配地图数据的"开封市"
+        '平顶山市': 'pingdingshan.html', // 匹配地图数据的"平顶山市"
+        '焦作市': 'jiaozuo.html',        // 匹配地图数据的"焦作市"
+        '鹤壁市': 'hebi.html',           // 匹配地图数据的"鹤壁市"
+        '新乡市': 'xinxiang.html',       // 匹配地图数据的"新乡市"
+        '濮阳市': 'puyang.html',         // 匹配地图数据的"濮阳市"
+        '许昌市': 'xuchang.html',        // 匹配地图数据的"许昌市"
+        '漯河市': 'luohe.html',          // 匹配地图数据的"漯河市"
+        '三门峡市': 'sanmenxia.html',    // 匹配地图数据的"三门峡市"
+        '商丘市': 'shangqiu.html',       // 匹配地图数据的"商丘市"
+        '周口市': 'zhoukou.html',        // 匹配地图数据的"周口市"
+        '济源市': 'jiyuan.html',         // 匹配地图数据的"济源市"
+        '驻马店市': 'zhumadian.html'     // 匹配地图数据的"驻马店市"
+      };
+      
+      // 获取当前城市对应的页面链接（关键：去掉城市名中的"市"字，与map数据一致）
+      const pureCityName = cityName.replace('市', ''); // 如"郑州市"→"郑州"，匹配cityPageMap的key
+      const targetPage = cityPageMap[cityName]; // 直接用原始城市名匹配（因为map数据name是"郑州市"）
+      
+      // 验证链接是否存在，存在则跳转
+      if (targetPage) {
+        window.location.href = targetPage; // 当前窗口跳转
+        // window.open(targetPage, '_blank'); // 可选：新窗口打开
+      } else {
+        alert(`抱歉，${cityName}的专属页面正在建设中，敬请期待！`);
+      }
+    }
+    
+
+    // 页面加载完成后执行
+    document.addEventListener('DOMContentLoaded', function() {
+        // 1. 初始化河南地图
+        initHenanMap();
+        
+        // 2. 移动端菜单切换
+        const menuToggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        menuToggle.addEventListener('click', function() {
+            mobileMenu.classList.toggle('hidden');
+            // 切换图标
+            const icon = menuToggle.querySelector('i');
+            if (mobileMenu.classList.contains('hidden')) {
+                icon.classList.remove('fa-times');
+                icon.classList.add('fa-bars');
+            } else {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-times');
+            }
+        });
+        
+        // 3. 导航栏滚动效果
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                navbar.classList.add('py-2', 'shadow-lg');
+                navbar.classList.remove('py-3', 'md:py-4');
+            } else {
+                navbar.classList.add('py-3', 'md:py-4');
+                navbar.classList.remove('py-2', 'shadow-lg');
+            }
+        });
+        
+        // 4. 滚动动画（fade-in元素）
+        const fadeElements = document.querySelectorAll('.fade-in');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { threshold: 0.1 });
+        
+        fadeElements.forEach(element => {
+            observer.observe(element);
+        });
+        
+        // 5. 作品筛选功能
+        const filterButtons = document.querySelectorAll('.work-filter');
+        const craftItems = document.querySelectorAll('.craft-item');
+        
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // 切换按钮样式
+                filterButtons.forEach(btn => {
+                    btn.classList.remove('active', 'bg-primary', 'text-white');
+                    btn.classList.add('bg-secondary', 'text-dark', 'hover:bg-secondary/70');
+                });
+                this.classList.add('active', 'bg-primary', 'text-white');
+                this.classList.remove('bg-secondary', 'text-dark', 'hover:bg-secondary/70');
+                
+                // 筛选作品
+                const filter = this.getAttribute('data-filter');
+                craftItems.forEach(item => {
+                    if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+        
+        // 6. 作品详情模态框
+        const workModal = document.getElementById('work-modal');
+        const closeModal = document.getElementById('close-modal');
+        const viewWorkButtons = document.querySelectorAll('.view-work');
+        
+        // 作品详情数据
+        const workDetails = [
+            {
+                id: 1,
+                title: '牡丹花纹桌布',
+                category: '家居装饰',
+                image: 'https://picsum.photos/800/600?random=20',
+                description: '采用传统牡丹纹样，象征富贵吉祥，适用于各类家居装饰。桌布直径120cm，采用优质纯棉线手工钩编，历经45天完成。针法细腻，图案饱满，色彩搭配典雅，既是实用的家居用品，也是精美的艺术品。',
+                artisan: '张秀兰 阿姨',
+                time: '45天',
+                material: '优质纯棉线',
+                price: '¥398.00'
+            },
+            {
+                id: 2,
+                title: '梅花纹披肩',
+                category: '服饰配饰',
+                image: 'https://picsum.photos/800/600?random=21',
+                description: '采用优质棉纱线，手工钩编梅花图案，保暖又美观。披肩长180cm，宽70cm，边缘采用流苏设计，增添灵动美感。梅花象征坚韧不拔的品格，整体设计简约大方，适合春秋季节佩戴，是馈赠亲友的佳品。',
+                artisan: '李秀英 大姐',
+                time: '30天',
+                material: '优质棉纱线',
+                price: '¥298.00'
+            },
+            {
+                id: 3,
+                title: '吉祥如意摆件',
+                category: '艺术摆件',
+                image: 'https://picsum.photos/800/600?random=22',
+                description: '融合传统吉祥纹样，采用多种钩编技法，是收藏和装饰的佳品。摆件高30cm，宽25cm，采用彩色丝线钩编，搭配木质底座。图案包含如意、祥云、蝙蝠等吉祥元素，寓意吉祥如意、福气满满，适合摆放于客厅、书房等场所。',
+                artisan: '王美玲 师傅',
+                time: '60天',
+                material: '彩色丝线',
+                price: '¥598.00'
+            },
+            {
+                id: 4,
+                title: '几何图案餐垫套装',
+                category: '家居装饰',
+                image: 'https://picsum.photos/800/600?random=23',
+                description: '现代简约风格，一套6件，耐高温，易清洗，实用美观。每个餐垫直径30cm，采用食品级环保线钩编，安全无毒。几何图案设计时尚大方，色彩搭配和谐，适合各种风格的餐桌装饰，是现代家居的理想选择。',
+                artisan: '李秀英 大姐',
+                time: '20天',
+                material: '食品级环保线',
+                price: '¥158.00'
+            },
+            {
+                id: 5,
+                title: '冬季保暖帽',
+                category: '服饰配饰',
+                image: 'https://picsum.photos/800/600?random=24',
+                description: '采用优质羊毛线，手工钩编，保暖性好，款式新颖。帽子采用双层设计，内层加绒，外层钩编花纹，既保暖又时尚。有多种颜色可选，适合不同年龄段人群佩戴，是冬季出行的必备单品。',
+                artisan: '张秀兰 阿姨',
+                time: '15天',
+                material: '优质羊毛线',
+                price: '¥128.00'
+            },
+            {
+                id: 6,
+                title: '山水挂毯',
+                category: '艺术摆件',
+                image: 'https://picsum.photos/800/600?random=25',
+                description: '灵感来源于中原山水风光，采用多种色彩纱线钩编而成。挂毯长150cm，宽80cm，采用渐变色彩设计，立体感强，生动再现了中原地区的山水美景。挂毯采用环保染料，色彩持久不褪色，是家居装饰和艺术收藏的珍品。',
+                artisan: '王美玲 师傅',
+                time: '90天',
+                material: '彩色环保纱线',
+                price: '¥898.00'
+            }
+        ];
+        
+        // 打开模态框
+        viewWorkButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                const workId = parseInt(this.getAttribute('data-id'));
+                const work = workDetails.find(item => item.id === workId);
+                
+                if (work) {
+                    document.getElementById('modal-image').src = work.image;
+                    document.getElementById('modal-title').textContent = work.title;
+                    document.getElementById('modal-category').textContent = work.category;
+                    document.getElementById('modal-description').textContent = work.description;
+                    document.getElementById('modal-artisan').textContent = work.artisan;
+                    document.getElementById('modal-time').textContent = work.time;
+                    document.getElementById('modal-material').textContent = work.material;
+                    document.getElementById('modal-price').textContent = work.price;
+                    
+                    // 显示模态框
+                    workModal.classList.remove('opacity-0', 'invisible');
+                    workModal.querySelector('div').classList.remove('scale-95');
+                    workModal.querySelector('div').classList.add('scale-100');
+                    document.body.style.overflow = 'hidden';
+                }
+            });
+        });
+        
+        // 关闭模态框
+        closeModal.addEventListener('click', function() {
+            workModal.classList.add('opacity-0', 'invisible');
+            workModal.querySelector('div').classList.remove('scale-100');
+            workModal.querySelector('div').classList.add('scale-95');
+            document.body.style.overflow = '';
+        });
+        
+        // 点击模态框背景关闭
+        workModal.addEventListener('click', function(e) {
+            if (e.target === workModal) {
+                closeModal.click();
+            }
+        });
+        
+        // 7. 返回顶部按钮
+        const backToTop = document.getElementById('back-to-top');
+        
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 300) {
+                backToTop.classList.remove('opacity-0', 'invisible');
+                backToTop.classList.add('opacity-100', 'visible');
+            } else {
+                backToTop.classList.add('opacity-0', 'invisible');
+                backToTop.classList.remove('opacity-100', 'visible');
+            }
+        });
+        
+        backToTop.addEventListener('click', function() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        // 8. 联系表单提交
+        const contactForm = document.getElementById('contact-form');
+        
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // 简单表单验证
+            const name = document.getElementById('name').value;
+            const phone = document.getElementById('phone').value;
+            const email = document.getElementById('email').value;
+            const message = document.getElementById('message').value;
+            
+            if (!name || !phone || !email || !message) {
+                alert('请填写完整的表单信息');
+                return;
+            }
+            
+            // 模拟表单提交
+            alert('您的咨询已提交成功，我们将尽快与您联系！');
+            contactForm.reset();
+        });
+        
+        // 9. 搜索功能实现
+        const searchInput = document.querySelector('.kf_search');
+        const searchBtn = document.querySelector('.search-btn');
+        const searchResultDropdown = document.getElementById('search-result-dropdown');
+        const searchResultContent = document.getElementById('search-result-content');
+        
+        // 搜索数据源
+        const searchData = [
+            // 作品
+            { type: '作品', title: '牡丹花纹桌布', category: '家居装饰', url: '#' },
+            { type: '作品', title: '梅花纹披肩', category: '服饰配饰', url: '#' },
+            { type: '作品', title: '吉祥如意摆件', category: '艺术摆件', url: '#' },
+            { type: '作品', title: '几何图案餐垫套装', category: '家居装饰', url: '#' },
+            { type: '作品', title: '冬季保暖帽', category: '服饰配饰', url: '#' },
+            { type: '作品', title: '山水挂毯', category: '艺术摆件', url: '#' },
+            // 手工艺人
+            { type: '手工艺人', title: '张秀兰 阿姨', category: '开封 · 传统纹样', url: '#' },
+            { type: '手工艺人', title: '李秀英 大姐', category: '洛阳 · 创新设计', url: '#' },
+            { type: '手工艺人', title: '王美玲 师傅', category: '郑州 · 艺术创作', url: '#' },
+            // 故事
+            { type: '故事', title: '从家庭副业到合作社', category: '集体力量', url: '#' },
+            { type: '故事', title: '三代人的钩编情缘', category: '技艺传承', url: '#' },
+            { type: '故事', title: '当传统技艺遇上现代设计', category: '创新发展', url: '#' },
+            { type: '故事', title: '钩编技艺助力脱贫攻坚', category: '乡村振兴', url: '#' }
+        ];
+        
+        // 执行搜索
+        function performSearch(query) {
+            if (!query.trim()) {
+                searchResultDropdown.classList.add('hidden');
+                return;
+            }
+            
+            const results = searchData.filter(item => 
+                item.title.toLowerCase().includes(query.toLowerCase()) || 
+                item.category.toLowerCase().includes(query.toLowerCase())
+            );
+            
+            if (results.length === 0) {
+                searchResultContent.innerHTML = `
+                    <div class="search-empty">
+                        <i class="fa fa-search-plus mr-1"></i> 未找到相关结果
+                    </div>
+                `;
+            } else {
+                let html = '';
+                results.forEach(item => {
+                    html += `
+                        <a href="${item.url}" class="block">
+                            <div class="search-result-item">
+                                <div class="search-result-title">${item.title}</div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-xs text-gray-500">${item.category}</span>
+                                    <span class="search-result-type">${item.type}</span>
+                                </div>
+                            </div>
+                        </a>
+                    `;
+                });
+                searchResultContent.innerHTML = html;
+            }
+            
+            searchResultDropdown.classList.remove('hidden');
+        }
+        
+        // 搜索按钮点击
+        searchBtn.addEventListener('click', function() {
+            performSearch(searchInput.value);
+        });
+        
+        // 输入框回车
+        searchInput.addEventListener('keyup', function(e) {
+            if (e.key === 'Enter') {
+                performSearch(this.value);
+            }
+        });
+        
+        // 点击页面其他地方关闭搜索结果
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.search-trigger')) {
+                searchResultDropdown.classList.add('hidden');
+            }
+        });
+        
+        // 10. 日期显示功能
+        function updateDateDisplay() {
+            const now = new Date();
+            const year = now.getFullYear();
+            const month = now.getMonth() + 1;
+            const day = now.getDate();
+            const weekDays = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'];
+            const week = weekDays[now.getDay()];
+            
+            // 显示公历日期和星期
+            const dateText = `${year}年${month.toString().padStart(2, '0')}月${day.toString().padStart(2, '0')}日`;
+            document.getElementById('current-date').textContent = dateText;
+            document.getElementById('current-week').textContent = week;
+            document.getElementById('current-date-mobile').textContent = dateText;
+            document.getElementById('current-week-mobile').textContent = week;
+            
+            // 简化版农历日期（实际项目中可使用农历库）
+            const lunarMonths = ['正', '二', '三', '四', '五', '六', '七', '八', '九', '十', '冬', '腊'];
+            const lunarDays = ['初一', '初二', '初三', '初四', '初五', '初六', '初七', '初八', '初九', '初十',
+                '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十',
+                '廿一', '廿二', '廿三', '廿四', '廿五', '廿六', '廿七', '廿八', '廿九', '三十'];
+            const lunarMonth = lunarMonths[month - 1];
+            const lunarDay = lunarDays[day - 1];
+            const lunarText = `农历${lunarMonth}月${lunarDay}`;
+            
+            document.getElementById('lunar-date').textContent = lunarText;
+            document.getElementById('lunar-date-mobile').textContent = lunarText;
+            
+            // 节气显示（简化版）
+            const solarTerms = [
+                { month: 2, day: 4, term: '立春' },
+                { month: 2, day: 19, term: '雨水' },
+                { month: 3, day: 6, term: '惊蛰' },
+                { month: 3, day: 21, term: '春分' },
+                { month: 4, day: 5, term: '清明' },
+                { month: 4, day: 20, term: '谷雨' },
+                { month: 5, day: 6, term: '立夏' },
+                { month: 5, day: 21, term: '小满' },
+                { month: 6, day: 6, term: '芒种' },
+                { month: 6, day: 22, term: '夏至' },
+                { month: 7, day: 7, term: '小暑' },
+                { month: 7, day: 23, term: '大暑' },
+                { month: 8, day: 8, term: '立秋' },
+                { month: 8, day: 23, term: '处暑' },
+                { month: 9, day: 8, term: '白露' },
+                { month: 9, day: 23, term: '秋分' },
+                { month: 10, day: 8, term: '寒露' },
+                { month: 10, day: 24, term: '霜降' },
+                { month: 11, day: 8, term: '立冬' },
+                { month: 11, day: 22, term: '小雪' },
+                { month: 12, day: 7, term: '大雪' },
+                { month: 12, day: 22, term: '冬至' },
+                { month: 1, day: 6, term: '小寒' },
+                { month: 1, day: 20, term: '大寒' }
+            ];
+            
+            // 找到当前节气
+            let currentTerm = '';
+            for (let i = 0; i < solarTerms.length; i++) {
+                const term = solarTerms[i];
+                const nextTerm = solarTerms[(i + 1) % solarTerms.length];
+                
+                // 处理12月和1月的跨年情况
+                if ((month === term.month && day >= term.day) || 
+                    (month === nextTerm.month && day < nextTerm.day && term.month === 12 && nextTerm.month === 1)) {
+                    currentTerm = term.term;
+                    break;
+                } else if (month === term.month && day >= term.day && 
+                           (i === solarTerms.length - 1 || month < solarTerms[i + 1].month || 
+                            (month === solarTerms[i + 1].month && day < solarTerms[i + 1].day))) {
+                    currentTerm = term.term;
+                    break;
+                }
+            }
+            
+            document.getElementById('current-solar-term').textContent = currentTerm;
+            document.getElementById('current-solar-term-mobile').textContent = currentTerm;
+        }
+        
+        // 初始化日期显示
+        updateDateDisplay();
+        // 每天更新一次日期
+        setInterval(updateDateDisplay, 24 * 60 * 60 * 1000);
+    });
+
+    // 初始化河南地图函数
+    function initHenanMap() {
+        const mapDom = document.getElementById('map');
+        if (!mapDom) return;
+        
+        const myChart = echarts.init(mapDom);
+        
+        // 地图数据（艺人数量）
+        const mapData = [
+            { name: '郑州市', value: 120 },
+            { name: '洛阳市', value: 95 },
+            { name: '开封市', value: 80 },
+            { name: '平顶山市', value: 65 },
+            { name: '安阳市', value: 70 },
+            { name: '鹤壁市', value: 35 },
+            { name: '新乡市', value: 75 },
+            { name: '焦作市', value: 55 },
+            { name: '濮阳市', value: 45 },
+            { name: '许昌市', value: 60 },
+            { name: '漯河市', value: 30 },
+            { name: '三门峡市', value: 40 },
+            { name: '南阳市', value: 85 },
+            { name: '商丘市', value: 50 },
+            { name: '信阳市', value: 65 },
+            { name: '周口市', value: 70 },
+            { name: '驻马店市', value: 60 },
+            { name: '济源市', value: 25 }
+        ];
+        
+        // 地图配置项
+        const option = {
+            tooltip: {
+                trigger: 'item',
+                formatter: function(params) {
+                    return `
+                        <div class="font-bold">${params.name}</div>
+                        <div>钩编艺人数量：${params.value}+人</div>
+                        <div>作品年产出：${Math.floor(params.value * 12)}+件</div>
+                        <div>传承基地：${Math.floor(params.value / 20) + 1}个</div>
+                        <div class="text-primary mt-1">点击查看详情</div>
+                    `;
+                },
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                borderColor: '#8B5A2B',
+                borderWidth: 1,
+                textStyle: { color: '#3E2723' },
+                padding: 12,
+                borderRadius: 8
+            },
+            visualMap: {
+                min: 20,
+                max: 120,
+                left: 'left',
+                top: 'bottom',
+                text: ['高活跃地区', '低活跃地区'],
+                inRange: {
+                    color: ['#F5F5DC', '#E6D2B8', '#D4B996', '#C29E79', '#A67C52', '#8B5A2B']
+                },
+                calculable: true,
+                backgroundColor: 'rgba(255, 255, 255, 0.8)',
+                borderColor: '#8B5A2B',
+                borderWidth: 1,
+                textStyle: { color: '#3E2723' }
+            },
+            series: [
+                {
+                    name: '钩编艺人数量',
+                    type: 'map',
+                    map: 'henan',
+                    roam: true, // 允许缩放和拖动
+                    label: {
+                        show: true,
+                        color: '#3E2723',
+                        fontSize: 12,
+                        fontWeight: 500
+                    },
+                    emphasis: {
+                        label: {
+                            color: '#FFFFFF',
+                            fontSize: 14,
+                            fontWeight: 700
+                        },
+                        itemStyle: {
+                            areaColor: '#8B5A2B',
+                            borderColor: '#FFFFFF',
+                            borderWidth: 2
+                        }
+                    },
+                    data: mapData,
+                    itemStyle: {
+                        borderColor: '#FFFFFF',
+                        borderWidth: 1,
+                        areaColor: '#F5F5DC'
+                    },
+                    // 新增：地图区域点击事件
+                    onclick: function(params) {
+                    jumpToCityPage(params.name); // 调用跳转函数（params.name是城市名，如"郑州市"）
+                    }                    
+                }
+            ]
+        };
+        
+        // 渲染地图
+        myChart.setOption(option);
+        
+        // 窗口大小变化时自适应
+        window.addEventListener('resize', function() {
+            myChart.resize();
+        });
+    }
+  </script>
+</body>
+</html>

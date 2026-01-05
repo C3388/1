@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>中原女工钩编艺术 | 传统手工艺的现代传承</title>
+  <!-- 引入外部资源 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+  
+  <!-- Tailwind 配置 -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            // 主色调：温暖的棕色系，体现手工艺感
+            primary: '#8B5A2B',
+            // 辅助色：柔和的米色和绿色，展现自然与手工感
+            secondary: '#F5F5DC',
+            accent: '#4F7942',
+            dark: '#3E2723',
+            light: '#FFF8E7'
+          },
+          fontFamily: {
+            sans: ['Noto Sans SC', 'sans-serif'],
+            serif: ['Noto Serif SC', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+  
+  <!-- 自定义工具类 -->
+  <style type="text/tailwindcss">
+    @layer utilities {
+      .text-shadow {
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      .handcraft-border {
+        border-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path d="M0,0 L100,0 L100,100 L0,100 Z" fill="none" stroke="%238B5A2B" stroke-width="4" stroke-dasharray="10,5"/></svg>') 30 stretch;
+      }
+      /* 新增搜索样式 */
+      .search-result-item {
+        @apply py-2 px-3 hover:bg-secondary/30 rounded transition-colors cursor-pointer;
+      }
+      .search-result-title {
+        @apply font-medium text-dark;
+      }
+      .search-result-type {
+        @apply text-xs text-primary bg-primary/10 px-1.5 py-0.5 rounded-full mt-1 inline-block;
+      }
+      .search-empty {
+        @apply py-4 text-center text-gray-500 text-sm;
+      }
+    }
+  </style>
+  
+  <style>
+    /* 导入中文字体 */
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+    
+    /* 基础样式 */
+    body {
+      scroll-behavior: smooth;
+      background-color: #FFF8E7;
+    }
+    
+    /* 钩编纹理背景效果 */
+    .crochet-bg {
+      background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%238B5A2B' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    /* 图片悬停效果 */
+    .craft-item img {
+      transition: all 0.5s ease;
+    }
+    .craft-item:hover img {
+      transform: scale(1.05);
+    }
+    
+    /* 滚动动画 */
+    .fade-in {
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-in.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    /* 自定义滚动条 */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: #F5F5DC;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #8B5A2B;
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #6d4421;
+    }
+
+    /* 搜索框样式优化 */
+    .search-trigger .search-box {
+      transition: all 0.3s ease;
+    }
+    .search-trigger .search-box:focus-within {
+      box-shadow: 0 2px 8px rgba(139, 90, 43, 0.1);
+    }
+    #search-result-dropdown::-webkit-scrollbar {
+      width: 4px;
+    }
+  </style>
+</head>
+<body class="font-sans text-dark">
+  <!-- 导航栏 -->
+  <header id="navbar" class="fixed w-full bg-light/95 shadow-md z-50 transition-all duration-300">
+    <div class="container mx-auto px-4 py-3 md:py-4">
+      <div class="flex justify-between items-center">
+        <!-- Logo - 可替换为品牌Logo -->
+        <a href="#" class="flex items-center space-x-2">
+          <div class="w-10 h-10 bg-primary rounded-full flex items-center justify-center">
+            <i class="fa fa-scissors text-white text-xl"></i> <!-- 可替换为钩针图标 -->
+          </div>
+          <span class="text-xl font-serif font-bold">中原女工钩编</span>
+        </a>
+        
+        <!-- 桌面导航 -->
+        <nav class="hidden md:flex items-center space-x-8">
+          <a href="#home" class="hover:text-primary transition-colors">首页</a>
+          <a href="#about" class="hover:text-primary transition-colors">关于技艺</a>
+          <a href="#works" class="hover:text-primary transition-colors">作品展示</a>
+          <a href="#artisans" class="hover:text-primary transition-colors">手工艺人</a>
+          <a href="#stories" class="hover:text-primary transition-colors">背后故事</a>
+          <a href="#contact" class="hover:text-primary transition-colors">联系我们</a>
+        </nav>
+        
+        <!-- 右侧工具区（搜索+分享+日期） -->
+        <div class="flex items-center">
+          <!-- 搜索框 -->
+          <div class="search-trigger relative mr-4">
+            <div class="search-box flex items-center bg-light rounded-full px-3 py-1.5 border border-gray-200">
+              <i class="fa fa-search text-gray-400 mr-2"></i>
+              <input placeholder="搜索作品、艺人或故事..." class="kkword kf_search bg-transparent border-none outline-none w-48 md:w-64 placeholder-gray-400 text-sm" type="text">
+              <button class="search-btn submit_base ml-2 text-primary hover:text-primary/80 transition-colors">
+                <i class="fa fa-search"></i>
+              </button>
+            </div>
+            <!-- 搜索结果下拉框 -->
+            <div id="search-result-dropdown" class="absolute top-full right-0 mt-2 w-72 md:w-80 bg-white rounded-lg shadow-xl overflow-hidden z-50 hidden">
+              <div id="search-result-content" class="p-3 max-h-60 overflow-y-auto">
+                <!-- 搜索结果将在这里动态渲染 -->
+              </div>
+            </div>
+          </div>
+          
+          <!-- 社交分享 -->
+          <div class="share-box social-share mr-4" data-initialized="true">
+            <a href="#" class="social-share-icon share-item icon-wchat icon-weixin text-xl"></a>
+            <a href="#" class="social-share-icon share-item icon-sinawb icon-weibo text-xl"></a>
+          </div>
+          
+          <!-- 实时日期显示 -->
+          <div class="calendar-box hidden md:block" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+            <span id="current-date"></span>&nbsp;&nbsp;
+            <span id="current-week"></span>&nbsp;&nbsp;
+            <span id="lunar-date"></span>&nbsp;&nbsp;&nbsp;
+            <span id="current-solar-term"></span>
+            <img class="w w_kf inline-block ml-1" id="solar-term-icon" src="/Uploads/Picture/2019/11/07/s5dc405c9a6a1a.png" alt="" title="">
+          </div>
+
+          <!-- 移动端菜单按钮 -->
+          <button id="menu-toggle" class="md:hidden text-dark text-2xl">
+            <i class="fa fa-bars"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-200">
+      <div class="container mx-auto px-4 py-3 space-y-3">
+        <!-- 移动端日期显示 -->
+        <div class="calendar-box py-2 border-b border-gray-100" edit_params="width%3D50%26height%3D26%26unlimit%3D1%26noalert%3D1%26width2%3D50%26height2%3D26%26unlimit2%3D1%26noalert2%3D1%26title1Show%3D1%26title1Max%3D10%26backgroundColor%3D1%26zoom%3D0.2%26zoom2%3D0.2%26is_home%3D1">
+          <span id="current-date-mobile"></span>&nbsp;&nbsp;
+          <span id="current-week-mobile"></span>&nbsp;&nbsp;
+          <span id="lunar-date-mobile"></span>&nbsp;&nbsp;&nbsp;
+          <span id="current-solar-term-mobile"></span>
+        </div>
+        <a href="#home" class="block py-2 hover:text-primary transition-colors">首页</a>
+        <a href="#about" class="block py-2 hover:text-primary transition-colors">关于技艺</a>
+        <a href="#works" class="block py-2 hover:text-primary transition-colors">非遗地图</a>
+        <a href="#artisans" class="block py-2 hover:text-primary transition-colors">手工艺人</a>
+        <a href="#stories" class="block py-2 hover:text-primary transition-colors">背后故事</a>
+        <a href="#contact" class="block py-2 hover:text-primary transition-colors">联系我们</a>
+      </div>
+    </div>
+  </header>
+  
+  <main>
+    <!-- 英雄区域 -->
+    <section id="home" class="pt-24 md:pt-32 pb-16 md:pb-24 crochet-bg">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col md:flex-row items-center gap-10">
+          <!-- 左侧文本 -->
+          <div class="md:w-1/2 fade-in">
+            <h1 class="text-[clamp(2rem,5vw,3.5rem)] font-serif font-bold leading-tight mb-6">
+              指尖生花<br><span class="text-primary">女红传情</span>
+            </h1>
+            <p class="text-lg md:text-xl text-gray-700 mb-8 max-w-lg">
+              传承百年的中原女工钩编技艺，每一针每一线都凝聚着匠心与智慧，编织出生活的美好与温度。
+            </p>
+            <div class="flex flex-wrap gap-4">
+              <a href="#works" class="bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+                欣赏作品
+              </a>
+              <a href="#about" class="border-2 border-primary text-primary hover:bg-primary/5 px-6 py-3 rounded-lg transition-all">
+                了解更多
+              </a>
+            </div>
+          </div>
+          
+          <!-- 右侧主图 - 可替换为代表性钩编作品图片 -->
+          <div class="md:w-1/2 relative fade-in">
+            <div class="rounded-lg overflow-hidden shadow-2xl transform rotate-1 hover:rotate-0 transition-all duration-500">
+              <img src="https://picsum.photos/800/600?random=10" alt="精美的中原钩编作品展示" class="w-full h-auto">
+              <!-- 图片可替换为：高质量的钩编作品照片，如桌布、披肩或装饰品 -->
+            </div>
+            <!-- 装饰元素 -->
+            <div class="absolute -bottom-6 -left-6 w-32 h-32 bg-secondary rounded-full -z-10"></div>
+            <div class="absolute -top-6 -right-6 w-24 h-24 border-4 border-primary/30 rounded-full -z-10"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 关于技艺 -->
+    <section id="about" class="py-16 md:py-24 bg-white">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">百年传承的钩编技艺</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            中原女工钩编是河南及周边地区特有的传统手工艺，蕴含着丰富的文化内涵和地方特色
+          </p>
+        </div>
+        
+        <!-- 内容部分 -->
+        <div class="flex flex-col lg:flex-row gap-12 items-center">
+          <!-- 左侧图片 - 可替换为技艺展示图片 -->
+          <div class="lg:w-1/2 fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/700?random=11" alt="钩编技艺展示" class="w-full h-auto rounded-lg shadow-xl">
+              <!-- 图片可替换为：展示钩编过程的照片，如女工正在编织的场景 -->
+              <div class="absolute -bottom-5 -right-5 bg-secondary p-4 rounded-lg shadow-lg max-w-xs hidden md:block">
+                <p class="italic text-gray-700">"一根钩针，一团线，编织出生活的美好与希望。"</p>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 右侧内容 -->
+          <div class="lg:w-1/2 space-y-6 fade-in">
+            <div>
+              <h3 class="text-xl md:text-2xl font-serif font-bold mb-3 flex items-center">
+                <i class="fa fa-history text-primary mr-3"></i>
+                历史渊源
+              </h3>
+              <p class="text-gray-700">
+                中原钩编技艺起源于清末民初，距今已有百余年历史。最初是当地妇女为补贴家用而发展起来的手工艺，
+                经过几代人的传承与创新，逐渐形成了独特的艺术风格和地方特色。
+                <!-- 可替换为更详细的历史背景 -->
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-xl md:text-2xl font-serif font-bold mb-3 flex items-center">
+                <i class="fa fa-star text-primary mr-3"></i>
+                技艺特点
+              </h3>
+              <p class="text-gray-700">
+                中原钩编以其精细的针法、丰富的图案和鲜明的色彩著称。常用的技法包括锁针、短针、长针等，
+                图案多取材于中原地区的传统纹样和自然景观，如牡丹、梅花、吉祥纹样等，具有浓厚的地方特色。
+                <!-- 可替换为更详细的技艺特点描述 -->
+              </p>
+            </div>
+            
+            <div>
+              <h3 class="text-xl md:text-2xl font-serif font-bold mb-3 flex items-center">
+                <i class="fa fa-heart text-primary mr-3"></i>
+                文化价值
+              </h3>
+              <p class="text-gray-700">
+                这项技艺不仅是中原妇女智慧的结晶，更是中国传统手工艺的重要组成部分。它承载着地方文化记忆，
+                体现了劳动人民对美好生活的追求，具有重要的历史、文化和艺术价值。
+                <!-- 可替换为更详细的文化价值描述 -->
+              </p>
+            </div>
+            
+            <div class="pt-4">
+              <a href="#stories" class="inline-flex items-center text-primary font-medium hover:underline">
+                了解更多钩编故事 <i class="fa fa-long-arrow-right ml-2"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 作品展示 -->
+    <section id="works" class="py-16 md:py-24 bg-secondary/30 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">精美钩编作品</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            每一件作品都凝聚着手工艺人的心血与智慧，展现了中原钩编的独特魅力
+          </p>
+        </div>
+        
+        <!-- 作品分类标签 -->
+        <div class="flex flex-wrap justify-center gap-3 mb-12 fade-in">
+          <button class="work-filter active px-5 py-2 rounded-full bg-primary text-white font-medium transition-all" data-filter="all">全部作品</button>
+          <button class="work-filter px-5 py-2 rounded-full bg-white text-dark hover:bg-gray-100 transition-all" data-filter="home">家居装饰</button>
+          <button class="work-filter px-5 py-2 rounded-full bg-white text-dark hover:bg-gray-100 transition-all" data-filter="wear">服饰配饰</button>
+          <button class="work-filter px-5 py-2 rounded-full bg-white text-dark hover:bg-gray-100 transition-all" data-filter="art">艺术摆件</button>
+        </div>
+        
+        <!-- 作品网格 -->
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 作品1 - 可替换为实际作品 -->
+          <div class="craft-item bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="home">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=20" alt="钩编桌布" class="w-full h-full object-cover">
+              <!-- 图片可替换为：精美的钩编桌布照片 -->
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">牡丹花纹桌布</h3>
+              <p class="text-gray-600 mb-4">采用传统牡丹纹样，象征富贵吉祥，适用于各类家居装饰。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">家居装饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="1">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品2 - 可替换为实际作品 -->
+          <div class="craft-item bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="wear">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=21" alt="钩编披肩" class="w-full h-full object-cover">
+              <!-- 图片可替换为：精美的钩编披肩照片 -->
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">梅花纹披肩</h3>
+              <p class="text-gray-600 mb-4">采用优质棉纱线，手工钩编梅花图案，保暖又美观。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">服饰配饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="2">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品3 - 可替换为实际作品 -->
+          <div class="craft-item bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="art">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=22" alt="钩编摆件" class="w-full h-full object-cover">
+              <!-- 图片可替换为：精美的钩编艺术摆件照片 -->
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">吉祥如意摆件</h3>
+              <p class="text-gray-600 mb-4">融合传统吉祥纹样，采用多种钩编技法，是收藏和装饰的佳品。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">艺术摆件</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="3">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品4 - 可替换为实际作品 -->
+          <div class="craft-item bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="home">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=23" alt="钩编餐垫" class="w-full h-full object-cover">
+              <!-- 图片可替换为：精美的钩编餐垫照片 -->
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">几何图案餐垫套装</h3>
+              <p class="text-gray-600 mb-4">现代简约风格，一套6件，耐高温，易清洗，实用美观。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">家居装饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="4">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品5 - 可替换为实际作品 -->
+          <div class="craft-item bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="wear">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=24" alt="钩编帽子" class="w-full h-full object-cover">
+              <!-- 图片可替换为：精美的钩编帽子照片 -->
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">冬季保暖帽</h3>
+              <p class="text-gray-600 mb-4">采用优质羊毛线，手工钩编，保暖性好，款式新颖。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">服饰配饰</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="5">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 作品6 - 可替换为实际作品 -->
+          <div class="craft-item bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all" data-category="art">
+            <div class="overflow-hidden h-64">
+              <img src="https://picsum.photos/600/400?random=25" alt="钩编挂毯" class="w-full h-full object-cover">
+              <!-- 图片可替换为：精美的钩编挂毯照片 -->
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">山水挂毯</h3>
+              <p class="text-gray-600 mb-4">灵感来源于中原山水风光，采用多种色彩纱线钩编而成。</p>
+              <div class="flex justify-between items-center">
+                <span class="text-primary font-medium">艺术摆件</span>
+                <button class="view-work text-primary hover:text-primary/80 transition-colors" data-id="6">
+                  查看详情 <i class="fa fa-arrow-right ml-1"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- 查看更多按钮 -->
+        <div class="text-center mt-12">
+          <a href="#" class="inline-block bg-white border-2 border-primary text-primary hover:bg-primary/5 px-8 py-3 rounded-lg transition-all shadow-sm hover:shadow">
+            查看更多作品 <i class="fa fa-long-arrow-right ml-2"></i>
+          </a>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 手工艺人展示 -->
+    <section id="artisans" class="py-16 md:py-24 bg-white">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">匠心传承者</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            这些优秀的中原女工用双手编织梦想，用匠心传承技艺，让钩编艺术焕发新的生机
+          </p>
+        </div>
+        
+        <!-- 手工艺人网格 -->
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <!-- 手工艺人1 - 可替换为实际人物 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/400?random=30" alt="张阿姨" class="w-full h-64 object-cover">
+              <!-- 图片可替换为：手工艺人工作照 -->
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 class="text-xl font-bold text-white">张秀兰 阿姨</h3>
+                <p class="text-white/90">从业40年 · 开封</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                张阿姨是当地钩编技艺的代表性传承人，擅长传统吉祥纹样的钩编，
+                其作品曾多次在省级手工艺品展览中获奖。
+                <!-- 可替换为实际人物简介 -->
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">传统纹样</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">桌布</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">教学传承</span>
+              </div>
+              <a href="#" class="text-primary font-medium hover:underline">查看她的故事</a>
+            </div>
+          </div>
+          
+          <!-- 手工艺人2 - 可替换为实际人物 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/400?random=31" alt="李大姐" class="w-full h-64 object-cover">
+              <!-- 图片可替换为：手工艺人工作照 -->
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 class="text-xl font-bold text-white">李秀英 大姐</h3>
+                <p class="text-white/90">从业25年 · 洛阳</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                李大姐在传统技艺基础上融入现代设计元素，其创作的钩编服饰深受年轻人喜爱，
+                她还组织当地妇女成立了钩编合作社，带动乡亲们增收致富。
+                <!-- 可替换为实际人物简介 -->
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">服饰设计</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">创新设计</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">合作社</span>
+              </div>
+              <a href="#" class="text-primary font-medium hover:underline">查看她的故事</a>
+            </div>
+          </div>
+          
+          <!-- 手工艺人3 - 可替换为实际人物 -->
+          <div class="bg-light rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all fade-in">
+            <div class="relative">
+              <img src="https://picsum.photos/600/400?random=32" alt="王师傅" class="w-full h-64 object-cover">
+              <!-- 图片可替换为：手工艺人工作照 -->
+              <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 to-transparent p-4">
+                <h3 class="text-xl font-bold text-white">王美玲 师傅</h3>
+                <p class="text-white/90">从业30年 · 郑州</p>
+              </div>
+            </div>
+            <div class="p-6">
+              <p class="text-gray-700 mb-4">
+                王师傅擅长大型钩编艺术作品，其创作的《清明上河图》钩编长卷耗时3年完成，
+                被誉为"钩编艺术的奇迹"，现收藏于河南省民间艺术馆。
+                <!-- 可替换为实际人物简介 -->
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">大型作品</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">艺术创作</span>
+                <span class="bg-primary/10 text-primary text-sm px-3 py-1 rounded-full">文化遗产</span>
+              </div>
+              <a href="#" class="text-primary font-medium hover:underline">查看她的故事</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 背后故事 -->
+    <section id="stories" class="py-16 md:py-24 bg-primary/5 crochet-bg">
+      <div class="container mx-auto px-4">
+        <!-- 标题部分 -->
+        <div class="text-center max-w-3xl mx-auto mb-16 fade-in">
+          <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-4">钩编背后的故事</h2>
+          <div class="w-20 h-1 bg-primary mx-auto mb-6"></div>
+          <p class="text-lg text-gray-700">
+            每一根线都有温度，每一个结都有故事，这些平凡而伟大的女性用双手编织出不平凡的人生
+          </p>
+        </div>
+        
+        <!-- 故事展示 -->
+        <div class="grid md:grid-cols-2 gap-10">
+          <!-- 故事1 - 可替换为真实故事 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=40" alt="合作社故事" class="w-full h-full object-cover">
+              <!-- 图片可替换为：合作社相关照片 -->
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">集体力量</span>
+              <h3 class="text-xl font-bold mb-3">从家庭副业到合作社</h3>
+              <p class="text-gray-700 mb-4">
+                2010年，李大姐组织了村里10名妇女成立了钩编小组，从最初的家庭副业，
+                发展到如今拥有50多名成员的专业合作社，产品远销全国各地，
+                让钩编技艺成为带动乡村振兴的新动力。
+                <!-- 可替换为真实故事内容 -->
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+          
+          <!-- 故事2 - 可替换为真实故事 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=41" alt="传承故事" class="w-full h-full object-cover">
+              <!-- 图片可替换为：技艺传承相关照片 -->
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">技艺传承</span>
+              <h3 class="text-xl font-bold mb-3">三代人的钩编情缘</h3>
+              <p class="text-gray-700 mb-4">
+                张阿姨的钩编技艺源自她的母亲，如今她又将这门手艺传给了女儿。
+                三代人见证了钩编技艺的变迁，从解决温饱到艺术创作，
+                一根钩针串联起了家族的记忆和情感，也承载了中原女性的智慧与坚韧。
+                <!-- 可替换为真实故事内容 -->
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+          
+          <!-- 故事3 - 可替换为真实故事 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=42" alt="创新故事" class="w-full h-full object-cover">
+              <!-- 图片可替换为：创新设计相关照片 -->
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">创新发展</span>
+              <h3 class="text-xl font-bold mb-3">当传统技艺遇上现代设计</h3>
+              <p class="text-gray-700 mb-4">
+                年轻设计师小王将中原传统钩编技艺与现代时尚元素相结合，
+                设计的系列作品在国际时装周上惊艳亮相，让这一古老的手工艺
+                焕发出新的生命力，走向更广阔的舞台。
+                <!-- 可替换为真实故事内容 -->
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+          
+          <!-- 故事4 - 可替换为真实故事 -->
+          <div class="bg-white rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all flex flex-col md:flex-row fade-in">
+            <div class="md:w-2/5">
+              <img src="https://picsum.photos/400/500?random=43" alt="扶贫故事" class="w-full h-full object-cover">
+              <!-- 图片可替换为：扶贫相关照片 -->
+            </div>
+            <div class="md:w-3/5 p-6">
+              <span class="inline-block bg-primary/10 text-primary text-sm px-3 py-1 rounded-full mb-3">乡村振兴</span>
+              <h3 class="text-xl font-bold mb-3">钩编技艺助力脱贫攻坚</h3>
+              <p class="text-gray-700 mb-4">
+                在政府的扶持下，钩编产业成为当地脱贫攻坚的重要抓手。
+                许多贫困妇女通过学习钩编技艺，实现了居家就业，
+                不仅增加了收入，更找回了自信，用双手编织出幸福生活。
+                <!-- 可替换为真实故事内容 -->
+              </p>
+              <a href="#" class="text-primary font-medium hover:underline">阅读全文</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 联系与支持 -->
+    <section id="contact" class="py-16 md:py-24 bg-white">
+      <div class="container mx-auto px-4">
+        <div class="flex flex-col lg:flex-row gap-12">
+          <!-- 左侧内容 -->
+          <div class="lg:w-1/2 fade-in">
+            <h2 class="text-[clamp(1.8rem,4vw,2.5rem)] font-serif font-bold mb-6">联系我们</h2>
+            <p class="text-lg text-gray-700 mb-8">
+              如果您对中原女工钩编艺术感兴趣，想了解更多信息，或者希望购买、定制作品，
+              欢迎通过以下方式联系我们。
+            </p>
+            
+            <!-- 联系信息 -->
+            <div class="space-y-6 mb-10">
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fa fa-map-marker text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-1">工作室地址</h3>
+                  <p class="text-gray-700">
+                    河南省郑州市金水区文化创意产业园A座305室
+                    <!-- 可替换为实际地址 -->
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fa fa-phone text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-1">联系电话</h3>
+                  <p class="text-gray-700">
+                    0371-12345678<br>
+                    138-1234-5678
+                    <!-- 可替换为实际电话 -->
+                  </p>
+                </div>
+              </div>
+              
+              <div class="flex items-start gap-4">
+                <div class="w-12 h-12 bg-primary/10 rounded-full flex items-center justify-center flex-shrink-0 mt-1">
+                  <i class="fa fa-envelope text-primary text-xl"></i>
+                </div>
+                <div>
+                  <h3 class="text-xl font-bold mb-1">电子邮箱</h3>
+                  <p class="text-gray-700">
+                    contact@zhongyuangoubian.com<br>
+                    orders@zhongyuangoubian.com
+                    <!-- 可替换为实际邮箱 -->
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            <!-- 社交媒体 -->
+            <div>
+              <h3 class="text-xl font-bold mb-4">关注我们</h3>
+              <div class="flex gap-4">
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-weixin"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-weibo"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-instagram"></i>
+                </a>
+                <a href="#" class="w-10 h-10 bg-primary/10 hover:bg-primary/20 rounded-full flex items-center justify-center text-primary transition-all">
+                  <i class="fa fa-youtube-play"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+          
+          <!-- 右侧表单 -->
+          <div class="lg:w-1/2 fade-in">
+            <div class="bg-light p-8 rounded-xl shadow-lg">
+              <h3 class="text-2xl font-bold mb-6">发送咨询</h3>
+              <form id="contact-form" class="space-y-6">
+                <div class="grid md:grid-cols-2 gap-6">
+                  <div>
+                    <label for="name" class="block text-gray-700 font-medium mb-2">您的姓名</label>
+                    <input type="text" id="name" name="name" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的姓名" required>
+                  </div>
+                  <div>
+                    <label for="phone" class="block text-gray-700 font-medium mb-2">联系电话</label>
+                    <input type="tel" id="phone" name="phone" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的电话" required>
+                  </div>
+                </div>
+                
+                <div>
+                  <label for="email" class="block text-gray-700 font-medium mb-2">电子邮箱</label>
+                  <input type="email" id="email" name="email" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的邮箱" required>
+                </div>
+                
+                <div>
+                  <label for="subject" class="block text-gray-700 font-medium mb-2">咨询主题</label>
+                  <select id="subject" name="subject" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" required>
+                    <option value="" disabled selected>请选择咨询主题</option>
+                    <option value="purchase">购买作品</option>
+                    <option value="custom">定制作品</option>
+                    <option value="cooperation">合作洽谈</option>
+                    <option value="learn">学习技艺</option>
+                    <option value="other">其他问题</option>
+                  </select>
+                </div>
+                
+                <div>
+                  <label for="message" class="block text-gray-700 font-medium mb-2">咨询内容</label>
+                  <textarea id="message" name="message" rows="5" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary/50 focus:border-primary transition-all" placeholder="请输入您的咨询内容" required></textarea>
+                </div>
+                
+                <div>
+                  <button type="submit" class="w-full bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg">
+                    提交咨询
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <!-- 订阅区域 -->
+    <section class="py-16 bg-primary text-white">
+      <div class="container mx-auto px-4">
+        <div class="max-w-4xl mx-auto text-center">
+          <h2 class="text-[clamp(1.5rem,3vw,2rem)] font-serif font-bold mb-4">订阅钩编资讯</h2>
+          <p class="text-white/80 text-lg mb-8">
+            订阅我们的 newsletter，及时了解中原钩编的最新动态、作品发布和活动信息
+          </p>
+          <form class="flex flex-col sm:flex-row gap-4 max-w-lg mx-auto">
+            <input type="email" placeholder="请输入您的邮箱地址" class="flex-grow px-4 py-3 rounded-lg focus:outline-none focus:ring-2 focus:ring-white/50">
+            <button type="submit" class="bg-white text-primary hover:bg-gray-100 font-medium px-6 py-3 rounded-lg transition-all shadow-md hover:shadow-lg whitespace-nowrap">
+              立即订阅
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- 页脚 -->
+  <footer class="bg-dark text-white pt-16 pb-8">
+    <div class="container mx-auto px-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-12">
+        <!-- 关于我们 -->
+        <div>
+          <div class="flex items-center space-x-2 mb-6">
+            <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center">
+              <i class="fa fa-scissors text-primary text-xl"></i>
+            </div>
+            <span class="text-xl font-serif font-bold">中原女工钩编</span>
+          </div>
+          <p class="text-gray-400 mb-6">
+            致力于传承和发展中原地区的传统钩编技艺，
+            展示女工们的精湛手艺和艺术创作，推动传统手工艺的现代传承。
+          </p>
+          <div class="flex gap-4">
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-weixin"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-weibo"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-instagram"></i>
+            </a>
+            <a href="#" class="w-10 h-10 bg-gray-800 hover:bg-primary rounded-full flex items-center justify-center text-white transition-all">
+              <i class="fa fa-youtube-play"></i>
+            </a>
+          </div>
+        </div>
+        
+        <!-- 快速链接 -->
+        <div>
+          <h4 class="text-lg font-bold mb-6">快速链接</h4>
+          <ul class="space-y-3">
+            <li><a href="#home" class="text-gray-400 hover:text-white transition-colors">首页</a></li>
+            <li><a href="#about" class="text-gray-400 hover:text-white transition-colors">关于技艺</a></li>
+            <li><a href="#works" class="text-gray-400 hover:text-white transition-colors">作品展示</a></li>
+            <li><a href="#artisans" class="text-gray-400 hover:text-white transition-colors">手工艺人</a></li>
+            <li><a href="#stories" class="text-gray-400 hover:text-white transition-colors">背后故事</a></li>
+            <li><a href="#contact" class="text-gray-400 hover:text-white transition-colors">联系我们</a></li>
+          </ul>
+        </div>
+        
+        <!-- 帮助中心 -->
+        <div>
+          <h4 class="text-lg font-bold mb-6">帮助中心</h4>
+          <ul class="space-y-3">
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">购买指南</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">定制流程</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">支付方式</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">配送信息</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">常见问题</a></li>
+            <li><a href="#" class="text-gray-400 hover:text-white transition-colors">退换政策</a></li>
+          </ul>
+        </div>
+        
+        <!-- 联系信息 -->
+        <div>
+          <h4 class="text-lg font-bold mb-6">联系方式</h4>
+          <ul class="space-y-3">
+            <li class="flex items-start gap-3">
+              <i class="fa fa-map-marker text-primary mt-1"></i>
+              <span class="text-gray-400">河南省郑州市金水区文化创意产业园A座305室</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa fa-phone text-primary mt-1"></i>
+              <span class="text-gray-400">0371-12345678</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa fa-envelope text-primary mt-1"></i>
+              <span class="text-gray-400">contact@zhongyuangoubian.com</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa fa-clock-o text-primary mt-1"></i>
+              <span class="text-gray-400">周一至周日: 9:00 - 18:00</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      
+      <!-- 底部版权信息 -->
+      <div class="border-t border-gray-800 pt-8">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <p class="text-gray-500 text-sm mb-4 md:mb-0">
+            &copy; 2023 中原女工钩编艺术中心 版权所有 | 豫ICP备12345678号
+            <!-- 可替换为实际版权信息 -->
+          </p>
+          <div class="flex gap-6">
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">隐私政策</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">服务条款</a>
+            <a href="#" class="text-gray-500 hover:text-gray-400 text-sm">网站地图</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+  
+  <!-- 返回顶部按钮 -->
+  <button id="back-to-top" class="fixed bottom-8 right-8 w-12 h-12 bg-primary text-white rounded-full shadow-lg flex items-center justify-center opacity-0 invisible transition-all duration-300 hover:bg-primary/90 z-50">
+    <i class="fa fa-chevron-up"></i>
+  </button>
+  
+  <!-- 作品详情模态框 -->
+  <div id="work-modal" class="fixed inset-0 bg-black/70 z-50 flex items-center justify-center opacity-0 invisible transition-all duration-300">
+    <div class="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-auto m-4 transform scale-95 transition-all duration-300">
+      <div class="relative">
+        <img id="modal-image" src="" alt="作品详情图" class="w-full h-auto">
+        <button id="close-modal" class="absolute top-4 right-4 w-10 h-10 bg-black/50 hover:bg-black/70 text-white rounded-full flex items-center justify-center transition-all">
+          <i class="fa fa-times"></i>
+        </button>
+      </div>
+      <div class="p-6">
+        <h3 id="modal-title" class="text-2xl font-bold mb-2"></h3>
+        <p id="modal-category" class="text-primary font-medium mb-4"></p>
+        <div id="modal-description" class="text-gray-700 mb-6"></div>
+        <div class="flex flex-wrap gap-4 mb-6">
+          <div class="flex items-center gap-2">
+            <i class="fa fa-user text-primary"></i>
+            <span id="modal-artisan">手工艺人</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa fa-clock-o text-primary"></i>
+            <span id="modal-time">制作时间</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <i class="fa fa-material text-primary"></i>
+            <span id="modal-material">材料</span>
+          </div>
+        </div>
+        <div class="flex justify-between items-center">
+          <span id="modal-price" class="text-xl font-bold text-primary"></span>
+          <button class="bg-primary hover:bg-primary/90 text-white px-6 py-2 rounded-lg transition-all">
+            立即购买
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- JavaScript -->
+  <script>
+    // 导航栏滚动效果
+    const navbar = document.getElementById('navbar');
+    const backToTop = document.getElementById('back-to-top');
+    
+    window.addEventListener('scroll', function() {
+      if (window.scrollY > 50) {
+        navbar.classList.add('py-2', 'shadow-md');
+        navbar.classList.remove('py-3', 'md:py-4');
+        backToTop.classList.remove('opacity-0', 'invisible');
+        backToTop.classList.add('opacity-100', 'visible');
+      } else {
+        navbar.classList.add('py-3', 'md:py-4');
+        navbar.classList.remove('py-2', 'shadow-md');
+        backToTop.classList.add('opacity-0', 'invisible');
+        backToTop.classList.remove('opacity-100', 'visible');
+      }
+    });
+    
+    // 移动端菜单切换
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    menuToggle.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+      const icon = menuToggle.querySelector('i');
+      if (icon.classList.contains('fa-bars')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-times');
+      } else {
+        icon.classList.remove('fa-times');
+        icon.classList.add('fa-bars');
+      }
+    });
+    
+    // 平滑滚动
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        
+        // 关闭移动端菜单
+        if (!mobileMenu.classList.contains('hidden')) {
+          mobileMenu.classList.add('hidden');
+          const icon = menuToggle.querySelector('i');
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        }
+        
+        const targetId = this.getAttribute('href');
+        if (targetId === '#') return;
+        
+        const targetElement = document.querySelector(targetId);
+        if (targetElement) {
+          window.scrollTo({
+            top: targetElement.offsetTop - 80,
+            behavior: 'smooth'
+          });
+        }
+      });
+    });
+    
+    // 返回顶部按钮
+    backToTop.addEventListener('click', function() {
+      window.scrollTo({
+        top: 0,
+        behavior: 'smooth'
+      });
+    });
+    
+    // 作品筛选
+    const workFilters = document.querySelectorAll('.work-filter');
+    const craftItems = document.querySelectorAll('.craft-item');
+    
+    workFilters.forEach(filter => {
+      filter.addEventListener('click', function() {
+        // 更新筛选按钮样式
+        workFilters.forEach(f => {
+          f.classList.remove('active', 'bg-primary', 'text-white');
+          f.classList.add('bg-white', 'text-dark', 'hover:bg-gray-100');
+        });
+        
+        this.classList.add('active', 'bg-primary', 'text-white');
+        this.classList.remove('bg-white', 'text-dark', 'hover:bg-gray-100');
+        
+        const category = this.getAttribute('data-filter');
+        
+        // 筛选作品
+        craftItems.forEach(item => {
+          if (category === 'all' || item.getAttribute('data-category') === category) {
+            item.style.display = 'block';
+            // 添加淡入动画
+            setTimeout(() => {
+              item.style.opacity = '1';
+              item.style.transform = 'scale(1)';
+            }, 50);
+          } else {
+            item.style.opacity = '0';
+            item.style.transform = 'scale(0.95)';
+            // 延迟隐藏，等待动画完成
+            setTimeout(() => {
+              item.style.display = 'none';
+            }, 300);
+          }
+        });
+      });
+    });
+    
+    // 作品详情模态框
+    const workModal = document.getElementById('work-modal');
+    const modalImage = document.getElementById('modal-image');
+    const modalTitle = document.getElementById('modal-title');
+    const modalCategory = document.getElementById('modal-category');
+    const modalDescription = document.getElementById('modal-description');
+    const modalArtisan = document.getElementById('modal-artisan');
+    const modalTime = document.getElementById('modal-time');
+    const modalMaterial = document.getElementById('modal-material');
+    const modalPrice = document.getElementById('modal-price');
+    const closeModal = document.getElementById('close-modal');
+    const viewWorkButtons = document.querySelectorAll('.view-work');
+    
+    // 作品数据 - 可替换为实际作品数据
+    const workData = {
+      1: {
+        title: "牡丹花纹桌布",
+        image: "https://picsum.photos/800/600?random=20",
+        category: "家居装饰",
+        description: "这款桌布采用传统牡丹纹样设计，象征富贵吉祥。选用优质棉纱线，经过30天精心钩编而成，直径120厘米，适用于各类圆形餐桌。牡丹是中原地区的代表性花卉，也是中国传统文化中的吉祥象征，寓意富贵荣华。",
+        artisan: "张秀兰 阿姨",
+        time: "30天",
+        material: "优质棉纱线",
+        price: "¥680.00"
+      },
+      2: {
+        title: "梅花纹披肩",
+        image: "https://picsum.photos/800/600?random=21",
+        category: "服饰配饰",
+        description: "梅花纹披肩采用优质棉纱线，手工钩编而成。梅花在中国传统文化中象征坚韧不拔的品格，这款披肩设计简洁大方，既可以作为日常服饰搭配，也可以在正式场合佩戴，保暖又美观。尺寸：180×70厘米。",
+        artisan: "李秀英 大姐",
+        time: "15天",
+        material: "优质棉纱线",
+        price: "¥380.00"
+      },
+      3: {
+        title: "吉祥如意摆件",
+        image: "https://picsum.photos/800/600?random=22",
+        category: "艺术摆件",
+        description: "这件吉祥如意摆件融合了传统吉祥纹样，采用多种钩编技法制作而成。整体造型精巧，细节丰富，是收藏和家居装饰的佳品。作品高约30厘米，宽约20厘米，采用多种彩色丝线钩编，色彩鲜艳而不失典雅。",
+        artisan: "王美玲 师傅",
+        time: "25天",
+        material: "彩色丝线",
+        price: "¥580.00"
+      },
+      4: {
+        title: "几何图案餐垫套装",
+        image: "https://picsum.photos/800/600?random=23",
+        category: "家居装饰",
+        description: "现代简约风格的几何图案餐垫套装，一套6件，每件直径30厘米。采用耐高温材料，易清洗，实用性强。设计灵感来源于中原地区的传统建筑纹样，融合现代审美，适合各类家居风格。",
+        artisan: "张秀兰 阿姨",
+        time: "10天",
+        material: "混纺线",
+        price: "¥260.00"
+      },
+      5: {
+        title: "冬季保暖帽",
+        image: "https://picsum.photos/800/600?random=24",
+        category: "服饰配饰",
+        description: "冬季保暖帽采用优质羊毛线，手工钩编而成。保暖性好，款式新颖，适合各种年龄段佩戴。帽檐设计有花纹装饰，既美观又实用。有多种颜色可供选择，适合冬季日常出行佩戴。",
+        artisan: "李秀英 大姐",
+        time: "5天",
+        material: "优质羊毛线",
+        price: "¥120.00"
+      },
+      6: {
+        title: "山水挂毯",
+        image: "https://picsum.photos/800/600?random=25",
+        category: "艺术摆件",
+        description: "山水挂毯的灵感来源于中原地区的秀美山水风光，采用多种色彩纱线钩编而成。作品长150厘米，宽80厘米，通过不同的针法表现山水的层次感和立体感，是一件极具艺术价值的装饰作品。",
+        artisan: "王美玲 师傅",
+        time: "45天",
+        material: "多种彩色纱线",
+        price: "¥1280.00"
+      }
+    };
+    
+    // 打开模态框
+    viewWorkButtons.forEach(button => {
+      button.addEventListener('click', function() {
+        const workId = this.getAttribute('data-id');
+        const work = workData[workId];
+        
+        if (work) {
+          modalImage.src = work.image;
+          modalImage.alt = work.title;
+          modalTitle.textContent = work.title;
+          modalCategory.textContent = work.category;
+          modalDescription.textContent = work.description;
+          modalArtisan.textContent = work.artisan;
+          modalTime.textContent = work.time;
+          modalMaterial.textContent = work.material;
+          modalPrice.textContent = work.price;
+          
+          // 显示模态框
+          workModal.classList.remove('opacity-0', 'invisible');
+          workModal.classList.add('opacity-100', 'visible');
+          // 模态框内容动画
+          setTimeout(() => {
+            workModal.querySelector('div').classList.remove('scale-95');
+            workModal.querySelector('div').classList.add('scale-100');
+          }, 50);
+          
+          // 禁止背景滚动
+          document.body.style.overflow = 'hidden';
+        }
+      });
+    });
+    
+    // 关闭模态框
+    function closeWorkModal() {
+      workModal.querySelector('div').classList.remove('scale-100');
+      workModal.querySelector('div').classList.add('scale-95');
+      
+      setTimeout(() => {
+        workModal.classList.add('opacity-0', 'invisible');
+        workModal.classList.remove('opacity-100', 'visible');
+        // 恢复背景滚动
+        document.body.style.overflow = '';
+      }, 300);
+    }
+    
+    closeModal.addEventListener('click', closeWorkModal);
+    
+    // 点击模态框外部关闭
+    workModal.addEventListener('click', function(e) {
+      if (e.target === this) {
+        closeWorkModal();
+      }
+    });
+    
+    // 滚动动画
+    const fadeElements = document.querySelectorAll('.fade-in');
+    
+    const fadeObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          fadeObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+    
+    fadeElements.forEach(element => {
+      fadeObserver.observe(element);
+    });
+    
+    // 表单提交处理
+    const contactForm = document.getElementById('contact-form');
+    if (contactForm) {
+      contactForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        // 模拟表单提交
+        const submitButton = this.querySelector('button[type="submit"]');
+        const originalText = submitButton.innerHTML;
+        
+        submitButton.disabled = true;
+        submitButton.innerHTML = '<i class="fa fa-spinner fa-spin mr-2"></i> 提交中...';
+        
+        setTimeout(() => {
+          // 显示成功消息
+          const formContainer = this.parentElement;
+          formContainer.innerHTML = `
+            <div class="text-center py-8">
+              <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fa fa-check text-green-500 text-3xl"></i>
+              </div>
+              <h3 class="text-2xl font-bold mb-2">咨询提交成功</h3>
+              <p class="text-gray-600 mb-6">
+                感谢您的咨询，我们将尽快与您联系
+              </p>
+              <a href="#contact" class="inline-block bg-primary hover:bg-primary/90 text-white font-medium px-6 py-3 rounded-lg transition-all">
+                返回
+              </a>
+            </div>
+          `;
+        }, 1500);
+      });
+    }
+  </script>
+</body>
+</html>
